@@ -1,0 +1,304 @@
+#!/bin/env Rscript
+args <- commandArgs()
+scriptPath = strsplit(args[4], '=', fixed = T)[[1]][2]
+scriptName = basename(scriptPath)
+scriptDir = dirname(scriptPath)
+args = args[-(1:5)]
+source(paste0(scriptDir, '/common.R'))
+
+usage = function(){
+    cat(paste0("Usage: ", scriptName) )
+    cat(" -p=outputName.pdf <input.tsv
+Option:
+    Common:
+    -p|pdf          FILE    The output figure in pdf[figure.pdf]
+    -w|width        INT     The figure width
+    -m|main         STR     The main title
+    -mainS          DOU     The size of main title[20 for ggplot]
+    -yl|ylog        INT     Transform the sector scale to INT base log
+    -y1             INT     The pie start
+    -y2             INT     The pie end
+    -ng|noGgplot            Draw figure in the style of R base rather than ggplot
+    -h|help                 Show help
+
+    ggplot specific:
+    -start          DOU     The start angle of zero[0]
+    -d|direction    1/-1    [1]: clockwise, -1: counter-clockwise
+    -b|bullseye             Draw bullseye chart. Label of each bullseye should put in the first column
+    -p|pos          STR     Position of bars on each bulleys([stack], fill, ...)
+    -nT|nText               Do not draw number text on each sector
+
+    -a|alpha        DOU     The alpha of sector body
+    -alphaV         STR     The column name to apply alpha (V3, V4, ...)
+    -alphaT         STR     The title of alpha legend[Alpha]
+    -alphaTP        POS     The title position of alpha legend[horizontal: top, vertical:right]
+    -alphaLP        POS     The label position of alpha legend[horizontal: top, vertical:right]
+    -alphaD         STR     The direction of alpha legend (horizontal, vertical)
+    -c|color        STR     The color of sector boundary
+    -colorV         STR     The column name to apply color (V3, V4,...)
+    -colorC                 Continuous color mapping
+    -colorT         STR     The title of color legend[Color]
+    -colorTP        POS     The title position of color legend[horizontal: top, vertical:right]
+    -colorLP        POS     The label position of color legend[horizontal: top, vertical:right]
+    -colorD         STR     The direction of color legend (horizontal, vertical)
+    -f|fill         STR     The color of sector body
+    -fillC                  Continuous fill mapping
+    -l|low          STR     Low color of scale color bar[white]
+    -high           STR     High color of scale color bar[red]
+    -fillT          STR     The title of fill legend[Category]
+    -fillTP         POS     The title position of fill legend[horizontal: top, vertical:right]
+    -fillLP         POS     The label position of fill legend[horizontal: top, vertical:right]
+    -fillD          STR     The direction of fill legend (horizontal, vertical)
+    -s|size         DOU     The size of sector boundary
+    -sizeV          STR     The column name to apply size (V3, V4,...)
+    -sizeT          STR     The title of size legend[Size]
+    -sizeTP         POS     The title position of size legend[horizontal: top, vertical:right]
+    -sizeLP         POS     The label position of size legend[horizontal: top, vertical:right]
+    -sizeD          STR     The direction of size legend (horizontal, vertical)
+                    
+    -noGuide                Don't show the legend guide
+    -lgPos          POS     The legend position[horizontal: top, vertical:right]
+    -lgPosX         [0,1]   The legend relative postion on X
+    -lgPosY         [0,1]   The legend relative postion on Y
+    -lgTtlS         INT     The legend title size[15]
+    -lgTxtS         INT     The legend text size[15]
+    -lgBox          STR     The legend box style (horizontal, vertical)
+
+    -fp|flip                Flip the bar to horizontal
+    -facet          STR     The facet type (facet_wrap, facet_grid)
+    -facetM         STR     The facet model (eg: '. ~ V3', 'V3 ~ .', 'V3 ~ V4', '. ~ V3 + V4', ...)
+    -facetScl       STR     The axis scale in each facet ([fixed], free, free_x or free_y)
+
+    -xPer                   Show X label in percentage
+    -yPer                   Show Y label in percentage
+    -xComma                 Show X label number with comma seperator
+    -yComma                 Show Y label number with comma seperator
+    -axisRatio      DOU     The fixed aspect ratio between y and x units
+
+    -annoTxt        STRs    The comma-seperated texts to be annotated
+    -annoTxtX       INTs    The comma-seperated X positions of text
+    -annoTxtY       INTs    The comma-seperated Y positions of text
+Skill:
+    Legend title of alpha, color, etc can be set as the same to merge their guides
+")
+    q(save = 'no')
+}
+
+alphaT = 'Alpha'
+colorT = 'Color'
+fillT = 'Category'
+sizeT = 'Size'
+lgTtlS = 15
+lgTxtS = 15
+showGuide = TRUE
+myPdf = 'figure.pdf'
+mainS = 20
+direction = 1
+start = 0
+position = 'stack'
+low = 'white'
+high = 'red'
+
+if(length(args) >= 1){
+    for(i in 1:length(args)){
+        arg = args[i]
+        tmp = parseArgAsNum(arg, 'start', 'start'); if(!is.null(tmp)) start = tmp
+        tmp = parseArg(arg, 'd(irection)?', 'd'); if(!is.null(tmp)) direction = tmp
+        tmp = parseArg(arg, 'pos(ition)?', 'pos'); if(!is.null(tmp)) position = tmp
+        if(arg == '-b' || arg == '-bullseye') bullseye = TRUE
+        if(arg == '-nT' || arg == '-nText') noText = TRUE
+        
+        tmp = parseArgAsNum(arg, 'a(lpha)?', 'a'); if(!is.null(tmp)) alpha = tmp
+        tmp = parseArg(arg, 'alphaV', 'alphaV'); if(!is.null(tmp)) alphaV = tmp
+        tmp = parseArg(arg, 'alphaT', 'alphaT'); if(!is.null(tmp)) alphaT = tmp
+        tmp = parseArg(arg, 'alphaTP', 'alphaTP'); if(!is.null(tmp)) alphaTP = tmp
+        tmp = parseArg(arg, 'alphaLP', 'alphaLP'); if(!is.null(tmp)) alphaLP = tmp
+        tmp = parseArg(arg, 'alphaD', 'alphaD'); if(!is.null(tmp)) alphaD = tmp
+        tmp = parseArg(arg, 'c(olor)?', 'c'); if(!is.null(tmp)) color = tmp
+        tmp = parseArg(arg, 'colorV', 'colorV'); if(!is.null(tmp)) colorV = tmp
+        if(arg == '-colorC') colorC = TRUE
+        tmp = parseArg(arg, 'colorT', 'colorT'); if(!is.null(tmp)) colorT = tmp
+        tmp = parseArg(arg, 'colorTP', 'colorTP'); if(!is.null(tmp)) colorTP = tmp
+        tmp = parseArg(arg, 'colorLP', 'colorLP'); if(!is.null(tmp)) colorLP = tmp
+        tmp = parseArg(arg, 'colorD', 'colorD'); if(!is.null(tmp)) colorD = tmp
+        if(arg == '-fillC') fillC = TRUE
+        tmp = parseArg(arg, 'f(ill)?', 'f'); if(!is.null(tmp)) fill = tmp
+        tmp = parseArg(arg, 'fillT', 'fillT'); if(!is.null(tmp)) fillT = tmp
+        tmp = parseArg(arg, 'fillTP', 'fillTP'); if(!is.null(tmp)) fillTP = tmp
+        tmp = parseArg(arg, 'fillLP', 'fillLP'); if(!is.null(tmp)) fillLP = tmp
+        tmp = parseArg(arg, 'fillD', 'fillD'); if(!is.null(tmp)) fillD = tmp
+        tmp = parseArgAsNum(arg, 's(ize)?', 's'); if(!is.null(tmp)) size = tmp
+        tmp = parseArg(arg, 'sizeV', 'sizeV'); if(!is.null(tmp)) sizeV = tmp
+        tmp = parseArg(arg, 'sizeT', 'sizeT'); if(!is.null(tmp)) sizeT = tmp
+        tmp = parseArg(arg, 'sizeTP', 'sizeTP'); if(!is.null(tmp)) sizeTP = tmp
+        tmp = parseArg(arg, 'sizeLP', 'sizeLP'); if(!is.null(tmp)) sizeLP = tmp
+        tmp = parseArg(arg, 'sizeD', 'sizeD'); if(!is.null(tmp)) sizeD = tmp
+        
+        if(arg == '-noGuide') showGuide = FALSE
+        tmp = parseArg(arg, 'lgPos', 'lgPos'); if(!is.null(tmp)) lgPos = tmp
+        tmp = parseArgAsNum(arg, 'lgPosX', 'lgPosX'); if(!is.null(tmp)) lgPosX = tmp
+        tmp = parseArgAsNum(arg, 'lgPosY', 'lgPosY'); if(!is.null(tmp)) lgPosY = tmp
+        tmp = parseArgAsNum(arg, 'lgTtlS', 'lgTtlS'); if(!is.null(tmp)) lgTtlS = tmp
+        tmp = parseArgAsNum(arg, 'lgTxtS', 'lgTxtS'); if(!is.null(tmp)) lgTxtS = tmp
+        tmp = parseArg(arg, 'lgBox', 'lgBox'); if(!is.null(tmp)) lgBox = tmp
+        
+        if(arg == '-fp' || arg =='-flip') flip = TRUE
+        tmp = parseArg(arg, 'facet', 'facet'); if(!is.null(tmp)) myFacet = tmp
+        tmp = parseArg(arg, 'facetM', 'facetM'); if(!is.null(tmp)) facetM = tmp
+        tmp = parseArg(arg, 'facetScl', 'facetScl'); if(!is.null(tmp)) facetScl = tmp
+        if(arg == '-xPer') xPer = TRUE
+        if(arg == '-yPer') yPer = TRUE
+        if(arg == '-xComma') xComma = TRUE
+        if(arg == '-yComma') yComma = TRUE
+        tmp = parseArgAsNum(arg, 'axisRatio', 'axisRatio'); if(!is.null(tmp)) axisRatio = tmp
+        tmp = parseArg(arg, 'annoTxt', 'annoTxt'); if(!is.null(tmp)) annoTxt = tmp
+        tmp = parseArg(arg, 'annoTxtX', 'annoTxtX'); if(!is.null(tmp)) annoTxtX = tmp
+        tmp = parseArg(arg, 'annoTxtY', 'annoTxtY'); if(!is.null(tmp)) annoTxtY = tmp
+        
+        if(arg == '-h' || arg == '-help') usage()
+        tmp = parseArg(arg, 'p(df)?', 'p'); if(!is.null(tmp)) myPdf = tmp
+        tmp = parseArgAsNum(arg, 'w(idth)?', 'w'); if(!is.null(tmp)) width = tmp
+        if(arg == '-ng' || arg == '-noGgplot') noGgplot = TRUE
+        tmp = parseArgAsNum(arg, 'y1', 'y1'); if(!is.null(tmp)) y1 = tmp
+        tmp = parseArgAsNum(arg, 'y2', 'y2'); if(!is.null(tmp)) y2 = tmp
+        tmp = parseArgAsNum(arg, 'yl(og)?', 'yl'); if(!is.null(tmp)) yLog = tmp
+        tmp = parseArg(arg, 'm(ain)?', 'm'); if(!is.null(tmp)) main = tmp
+        tmp = parseArgAsNum(arg, 'mainS', 'mainS'); if(!is.null(tmp)) mainS = tmp
+    }
+}
+if(exists('width')){
+    pdf(myPdf, width = width)
+}else{
+    pdf(myPdf)
+}
+
+data = read.delim(file('stdin'), header = F)
+
+if(exists('noGgplot')){
+    attach(data)
+    labels = paste0(V1, ' (', V2, ')')
+    myCmd = 'pie(x = V2, labels = labels, col = rainbow(nrow(data))'
+    if(direction == 1) myCmd = paste0(myCmd, ', clockwise = TRUE')
+    if(exists('start')) myCmd = paste0(myCmd, ', init.angle = start')
+    if(exists('size')) myCmd = paste0(myCmd, ', border = border')
+    if(exists('lty')) myCmd = paste0(myCmd, ', lty = lty')
+    if(exists('main')) myCmd = paste0(myCmd, ', main = main')
+    myCmd = paste0(myCmd, ')')
+    eval(parse(text = myCmd))
+}else{
+    library(ggplot2)
+    if(exists('bullseye')){
+        p = ggplot(data, aes(x = V1, y = V3, label = V3))
+        fillV= 'V2'
+    }else{
+        p = ggplot(data, aes(x = factor(1), y = V2, label = V2))
+        p = p + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank()) 
+        fillV = 'V1'
+    }
+
+    if(exists('alphaV')){
+        p = p + aes_string(alpha = alphaV)
+        myCmd = 'p = p + guides(alpha = guide_legend(alphaT'
+        if(exists('alphaTP')) myCmd = paste0(myCmd, ', title.position = alphaTP')
+        if(exists('alphaLP')) myCmd = paste0(myCmd, ', label.position = alphaLP')
+        if(exists('alphaD')) myCmd = paste0(myCmd, ', direction = alphaD')
+        myCmd = paste0(myCmd, '))')
+        eval(parse(text = myCmd))
+    }
+    if(exists('colorV')){
+        if(exists('colorC')){
+            p = p + aes_string(color = colorV)
+        }else{
+            myCmd = paste0('p = p + aes(color = factor(', colorV, '))'); eval(parse(text = myCmd))
+        }
+        myCmd = 'p = p + guides(color = guide_legend(colorT'
+        if(exists('colorTP')) myCmd = paste0(myCmd, ', title.position = colorTP')
+        if(exists('colorLP')) myCmd = paste0(myCmd, ', label.position = colorLP')
+        if(exists('colorD')) myCmd = paste0(myCmd, ', direction = colorD')
+        myCmd = paste0(myCmd, '))')
+        eval(parse(text = myCmd))
+    }
+    if(exists('fillC')){
+        p = p + aes_string(fill = fillV) + scale_fill_continuous(name = fillT, low = low, high = high)
+    }else{
+        myCmd = paste0('p = p + aes(fill = factor(', fillV, ')) + guides(fill = guide_legend(fillT')
+        if(exists('fillTP')) myCmd = paste0(myCmd, ', title.position = fillTP')
+        if(exists('fillLP')) myCmd = paste0(myCmd, ', label.position = fillLP')
+        if(exists('fillD')) myCmd = paste0(myCmd, ', direction = fillD')
+        myCmd = paste0(myCmd, '))')
+        eval(parse(text = myCmd))
+    }
+    if(exists('linetypeV')){
+        myCmd = paste0('p = p + aes(linetype = factor(', linetypeV, '))'); eval(parse(text = myCmd))
+        myCmd = 'p = p + guides(linetype = guide_legend(linetypeT'
+        if(exists('linetypeTP')) myCmd = paste0(myCmd, ', title.position = linetypeTP')
+        if(exists('linetypeLP')) myCmd = paste0(myCmd, ', label.position = linetypeLP')
+        if(exists('linetypeD')) myCmd = paste0(myCmd, ', direction = linetypeD')
+        myCmd = paste0(myCmd, '))')
+        eval(parse(text = myCmd))
+    }
+    if(exists('sizeV')){
+        p = p + aes_string(size = sizeV)
+        myCmd = 'p = p + guides(size = guide_legend(sizeT'
+        if(exists('sizeTP')) myCmd = paste0(myCmd, ', title.position = sizeTP')
+        if(exists('sizeLP')) myCmd = paste0(myCmd, ', label.position = sizeLP')
+        if(exists('sizeD')) myCmd = paste0(myCmd, ', direction = sizeD')
+        myCmd = paste0(myCmd, '))')
+        eval(parse(text = myCmd))
+    }
+    if(exists('weightV')){
+        p = p + aes_string(weight = weightV)
+        myCmd = 'p = p + guides(weight = guide_legend(weightT'
+        if(exists('weightTP')) myCmd = paste0(myCmd, ', title.position = weightTP')
+        if(exists('weightLP')) myCmd = paste0(myCmd, ', label.position = weightLP')
+        if(exists('weightD')) myCmd = paste0(myCmd, ', direction = weightD')
+        myCmd = paste0(myCmd, '))')
+        eval(parse(text = myCmd))
+    }
+
+    myCmd = paste0('p = p + geom_bar(stat = "identity", width = 1, show_guide = showGuide')
+    if(exists('alpha')) myCmd = paste0(myCmd, ', alpha = alpha')
+    if(exists('color')) myCmd = paste0(myCmd, ', color = color')
+    if(exists('fill')) myCmd = paste0(myCmd, ', fill = fill')
+    if(exists('size')) myCmd = paste0(myCmd, ', size = size')
+    if(exists('position')) myCmd = paste0(myCmd, ', position = position')
+    myCmd = paste0(myCmd, ')')
+    eval(parse(text = myCmd))
+    
+    if(exists('myFacet')){
+        myCmd = paste0('p = p + ', myFacet, '(facetM')
+        if(exists('facetScl')) myCmd = paste0(myCmd, ', scales = facetScl')
+        myCmd = paste0(myCmd, ')')
+        eval(parse(text = myCmd))
+    }
+    
+    if(!exists('bullseye') && !exists('noText')) p = p + geom_text(aes(y = cumsum(V2) - V2/2))
+    p = p + coord_polar(theta = "y", start = start, direction = direction)
+    
+    if(exists('flip')) p = p + coord_flip()
+
+    if(exists('lgPos')) p = p + theme(legend.position = lgPos)
+    if(exists('lgPosX') && exists('lgPosY')) p = p + theme(legend.position = c(lgPosX, lgPosY))
+    p = p + theme(legend.title = element_text(size = lgTtlS), legend.text = element_text(size = lgTxtS))
+    if(exists('lgBox')) p = p + theme(legend.box = lgBox)
+    if(exists('xPer')) p = p + scale_x_continuous(labels = percent)
+    if(exists('yPer')) p = p + scale_y_continuous(labels = percent)
+    if(exists('xComma')) p = p + scale_x_continuous(labels = comma)
+    if(exists('yComma')) p = p + scale_y_continuous(labels = comma)
+    if(exists('axisRatio')) p = p + coord_fixed(ratio = axisRatio)
+    if(exists('annoTxt')) p = p + annotate('text', x = as.numeric(strsplit(annoTxtX, ',', fixed = T)),
+                                           y = as.numeric(strsplit(annoTxtY, ',', fixed = T)),
+                                           label = strsplit(annoTxt, ',', fixed = T))
+    
+    if(exists('y1') && exists('y2')) p = p + coord_cartesian(ylim = c(y1, y2))
+    if(exists('yLog')){
+        library(scales)
+        if(exists('yLog')) p = p + scale_y_continuous(trans = log_trans(yLog)) + annotation_logticks(sides = 'l')
+        p = p + theme(panel.grid.minor = element_blank())
+    }
+    if(exists('main')) p = p + ggtitle(main)
+    p = p + theme(plot.title = element_text(size = mainS))
+    if(exists('anno')) p = p + annotate('text', x = 1:nrow(data), y = data[[2]], label = data[[2]])
+    
+    p
+}

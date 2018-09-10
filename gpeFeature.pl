@@ -12,8 +12,8 @@ sub usage{
     my $scriptName = basename $0;
     print <<HELP;
 Usage: perl $scriptName OPTION INPUT.gpe >OUTPUT.bed
-    if INPUT.gpe isn't specified, input from STDIN
-Example: perl $scriptName -b -g /data/genome/chr.size/hg19.size --upstream 1000 hg19.refGene.gpe >hg19.refGene.bed
+    If INPUT.gpe isn't specified, input from STDIN
+Example: perl $scriptName -b -g hg19.size --upstream 1000 hg19.refGene.gpe >hg19.refGene.bed
 Option:
     -b --bin                With bin column
     -i --intron             Fetch introns in each transcript

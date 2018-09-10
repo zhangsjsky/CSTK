@@ -28,7 +28,7 @@ while(my $data = $in->next_dataset){
 
 sub usage{
 print <<HELP;
-Usage:perl $scriptName input.fq >output.fq
+Usage: perl $scriptName input.fq >output.fq
     If INPUT isn't specified, input from STDIN
     -s  --source  STR   The quality format of your source fastq file ([fastq-illumina], fastq-solexa, fastq)
     -t  --target  STR   The quality format of your target fastq file (fastq-illumina, fastq-solexa, [fastq])

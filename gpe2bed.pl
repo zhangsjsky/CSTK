@@ -13,7 +13,8 @@ sub usage{
     my $scriptName = basename $0;
 print <<HELP;
 Usage: perl $scriptName INPUT.gpe >OUTPUT.bed
-    if INPUT.gpe isn't specified, input from STDIN
+    If INPUT.gpe isn't specified, input from STDIN
+    Output to STDOUT
 Option:
     -b --bin            With bin column
     -t --bedType    INT Bed type. It can be 3, 6, 9 or 12[$bedType]

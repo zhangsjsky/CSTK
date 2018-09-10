@@ -240,18 +240,17 @@ sub stringJoin{
 }
 
 sub usage{
-    my $scriptName=basename $0;
+    my $scriptName = basename $0;
 print <<HELP;
-    Usage: perl $scriptName Input_gpe.file >output_merge_gpe.file
-	If Input_gpe.file not specified, input from STDIN
-	Output to STDOUT
-
-	-b --bin		Have bin column
-        -l --locus              Merge with locus (default: merge gene)
-	-t --longTranscript	Overlap is against long transcript (default against short transcript)
-	-n --name 		Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
-	-p --percent		Minimal overlap percent to merge tracscript (default: 0)
-	-h --help		Print this help information
+Usage: perl $scriptName input.gpe >output.gpe
+    If input.gpe not specified, input from STDIN
+    Output to STDOUT
+    -b --bin		Have bin column
+    -l --locus          Merge with locus (default: merge gene)
+    -t --longTranscript	Overlap is against long transcript (default against short transcript)
+    -n --name 		Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
+    -p --percent	Minimal overlap percent to merge tracscript (default: 0)
+    -h --help		Print this help information
 HELP
 	exit(-1);
 }

@@ -7,7 +7,7 @@ args = args[-(1:5)]
 source(paste0(scriptDir, '/common.R'))
 
 usage = function(){
-    cat(paste0("Usage: ", scriptName) )
+    cat(paste0("Usage: ", scriptName))
     cat(" -p=outputName.pdf <input.tsv
 Option:
     Common:

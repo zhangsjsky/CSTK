@@ -9,7 +9,8 @@ source(paste0(scriptDir, '/common.R'))
 
 usage = function(){
     sink(stderr())
-    cat("Usage: scriptName.R -option=value <input.tsv
+    cat(paste0("Usage: ", scriptName))
+    cat(" -option=value <input.tsv
 Option:
     -p|pdf    PDF  The KM figure[KM.pdf]
     -w|width  INT  The figure width
@@ -18,21 +19,24 @@ Option:
     -m|main   STR  The main title
     -x|xlab   STR  The xlab[Time]
     -y|ylab   STR  The ylab[Survival Probability]
-
     -h             Show help
 Input (header isn't necessary):
   Example1:
     #time  event
     1      TRUE
-    2      FALSE
-    5      FALSE
-    10     TRUE
+    2      TRUE
+    2      TRUE
+    8      FALSE
+    5      TRUE
+    10     FALSE
   Example2:
     #time  event  group
     1      TRUE   male
-    2      FALSE  male
-    5      FALSE  female
-    10     TRUE   female
+    2      TRUE   male
+    2      TRUE   male
+    8      FALSE  male
+    5      TRUE   female
+    10     FALSE  female
 ")
     sink()
     q(save = 'no')

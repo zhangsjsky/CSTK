@@ -23,21 +23,21 @@ Usage: perl $scriptName -o originFile.tsv -1 1,4 -m i|include targetFile.tsv >fi
     If targetFile.tsv isn't specified, input is from STDIN
     Output to STDOUT
 Option:
-    -o --originFile     The original file containing fields (specified by --originFields) used to include or exclude lines in targetFile.tab
-    -1 --originFields   Comma-separated field list specifying which fileds in the originFile.tab to be used to include or exclude, 1-based start [1]
-                        The element of the list can be a single column number or a range with nonnumeric char as separator
-                        To specify the last column left the range right margin blank
-                        If continuous range specified like '1-3-6', the first range '1-3' will be output
-                        eg.:
+    -o --originFile    TSV  The original file containing fields (specified by --originFields) used to include or exclude lines in targetFile.tab
+    -1 --originFields  STR  Comma-separated field list specifying which fileds in the originFile.tab to be used to include or exclude, 1-based start [1]
+                            The element of the list can be a single column number or a range with nonnumeric char as separator
+                            To specify the last column left the range right margin blank
+                            If continuous range specified like '1-3-6', the first range '1-3' will be output
+                            eg.:
                             -1 1,4          output columns 1,4
                             -1 1-4,6..8     output columns 1,2,3,4,6,7,8
                             -1 1,4,6-       output columns 1,4,6,7,... last column
                             -1 1-3-6        output columns 1,2,3
-    -2 --targetFields   Comma-separated field list specifying which fileds in the targetFile.tab are used to include or exclude lines, 1-based start [1]
-                        More description about --targetFields, see --originFields
-    -m --mode           To include or exclude lines in targetFile.tab, it can be i|include or e|exclude[e]
-    -s --separator      (Optional)A separator to join the fields specified, if necessary[Empty string]
-    -h --help           Print this help information screen
+    -2 --targetFields  STR  Comma-separated field list specifying which fileds in the targetFile.tab are used to include or exclude lines, 1-based start [1]
+                            More description about --targetFields, see --originFields
+    -m --mode               To include or exclude lines in targetFile.tab, it can be i|include or e|exclude[e]
+    -s --separator          (Optional)A separator to join the fields specified, if necessary[Empty string]
+    -h --help               Print this help information
 HELP
     exit(-1);
 }

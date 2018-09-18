@@ -1,0 +1,30 @@
+[INFO] 2018-09-11 20:33:04 SurDiff...
+Call:
+survdiff(formula = Surv(V1, V2) ~ V3)
+
+          N Observed Expected (O-E)^2/E (O-E)^2/V
+V3=female 2        1      1.8     0.356     0.796
+V3=male   4        3      2.2     0.291     0.796
+
+ Chisq= 0.8  on 1 degrees of freedom, p= 0.372 
+[INFO] 2018-09-11 20:33:08 Draw with rms...
+[INFO] 2018-09-11 20:33:19 Draw with survival...
+Call: npsurv(formula = commonFormula, data = data)
+
+          n events *rmean *se(rmean) median 0.95LCL 0.95UCL
+V3=female 2      1    7.0       1.41      5       5      NA
+V3=male   4      3    3.5       1.60      2       1      NA
+    * restricted mean with upper limit =  9 
+Call: npsurv(formula = commonFormula, data = data)
+
+                V3=female 
+        time       n.risk      n.event     survival      std.err lower 95% CI 
+       5.000        2.000        1.000        0.500        0.354        0.125 
+upper 95% CI 
+       1.000 
+
+                V3=male 
+ time n.risk n.event survival std.err lower 95% CI upper 95% CI
+    1      4       1     0.75   0.217       0.4259            1
+    2      3       2     0.25   0.217       0.0458            1
+

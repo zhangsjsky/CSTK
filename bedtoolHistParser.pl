@@ -33,8 +33,8 @@ sub usage{
     my $scriptName = basename $0;
 print <<HELP;
 Usage: perl $scriptName bedtoolHist.tsv >depth.tsv
-    if INPUT isn't specified, input from STDIN. It's the output of 'bedtool coverage -hist' in bed format    
-    output to STDOUT
+    If INPUT isn't specified, input from STDIN. It's the output of 'bedtool coverage -hist' in bed format    
+    Output to STDOUT
 
     -h --help       Print this help information
 HELP

@@ -1,0 +1,9 @@
+[DEBUG] 2018-09-11 20:33:04 Check if the following variables are correct as expected:
+pdf	survival.pdf
+width	
+height	
+header	FALSE
+main	Kaplan-Meier Estimate
+xlab	Time
+ylab	Survival Probability
+

@@ -8,8 +8,8 @@ source(paste0(scriptDir, '/common.R'))
 
 usage = function(){
     sink(stderr())
-    cat("Usage: scriptName.R -option=value <sample1.lst >result.tsv
-    or scriptName.R -option=value sample1.lst sample2.lst >result.tsv
+    cat(paste0("Usage: ", scriptName))
+    cat(" -option=value <input.lst|input.lst|input1.lst input2.lst >pValue
 Options
     -a|alt  STR  The alternative hypothesis ([two.sided], greater, less)
                  You can specify just the initial letter

@@ -15,8 +15,8 @@ my $bedFormat = 3;
 sub usage{
     my $scriptName = basename $0;
 print <<HELP;
-Usage: perl $scriptName coverageBed.output >OUTPUT.tsv
-    If coverageBed.output isn't specified, input from STDIN
+Usage: perl $scriptName coverageBedOutput.tsv >OUTPUT.tsv
+    If coverageBedOutput.tsv isn't specified, input from STDIN
 Option:
     -b  -bedFormat  INT Bed format ([$bedFormat], 6)
     -h  --help          Print this help information

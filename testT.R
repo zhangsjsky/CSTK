@@ -8,7 +8,8 @@ source(paste0(scriptDir, '/common.R'))
 
 usage = function(){
     sink(stderr())
-    cat("Usage: scriptName.R -option=value <input.data >pValue
+    cat(paste0("Usage: ", scriptName))
+    cat(" -option=value <input.lst|<input1.lst input2.lst|input1.lst input2.lst >pValue
 Option:
     -p|pair      Pair
     -a|alt  STR  The alternative hypothesis: [two.sided], greatr or less

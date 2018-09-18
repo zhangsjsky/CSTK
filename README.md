@@ -189,7 +189,7 @@ gpeMerge.pl -h
 
 ​    A diagram to intuitively illustrate the merging:
 
-![WechatIMG586](D:\我的坚果云\CSTK\WechatIMG586.jpeg)
+![Merging_Illustration](https://github.com/zhangsjsky/CSTK/blob/master/Merging_Illustration.jpeg)
 
 [^From C(hristina)]: From C(hristina)
 

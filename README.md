@@ -1,5 +1,5 @@
 # Table of Contents
-    I. [Introduction](https://github.com/zhangsjsky/CSTK#i-introduction)
+    I. Introduction
     II. Prerequisites
     III. Download and Install
     IV. Tutorial
@@ -65,7 +65,7 @@ A) For script with only one input file, the input is fetched from STDIN (Standar
 
 B) Help information of almost all scripts can be viewed with -h, -help or --help options.
 
-C) For options with value, option and value of Perl and Shell scripts is separated by a space character (e.g. -option value), while that of R is separated by a equal mark (e.g. -option=value).
+C) For options with value, option and value of Perl and Shell scripts is separated by a space character (*e.g.* -option value), while that of R is separated by an equal mark (*e.g*. -option=value).
 
 ## 4.2 Example
 
@@ -196,6 +196,8 @@ A diagram to intuitively illustrate the merging:
 
 
 
+
+
 In the figure, the first and second lines are the two transcripts of the same gene, the third line is the result after merging.
 
 Use the example.gpe file in the previous section as input to run this script:
@@ -211,7 +213,7 @@ The content of the output:
 | 6| NM_015113| chr17 | -| 3907738| 4046253| 3910183| 4046189| 55 | 3907738,3912176,3912897,3916742,3917383,3917640,3919616,3920664,3921129,3922962,3924422,3926002,3928212,3935419,3936121,3937308,3945722,3947517,3953001,3954074,3955264,3957350,3959509,3961287,3962464,3966046,3967654,3969740,3970456,3973977,3975901,3977443,3978390,3978556,3979930,3980161,3981176,3984669,3985730,3988963,3989779,3990727,3991971,3994012,3999124,3999902,4005610,4007926,4008986,4012946,4015902,4017592,4020265,4027200,4045835, | 3910264,3912248,3913051,3916908,3917482,3917809,3919760,3921024,3921265,3923063,3924614,3926122,3928412,3935552,3936296,3937586,3945862,3947668,3953153,3954337,3955430,3957489,3959639,3961449,3962584,3966211,3968123,3969834,3970536,3974218,3976050,3977645,3978472,3978723,3980053,3980283,3981336,3984784,3985798,3989097,3989949,3990828,3992187,3994124,3999273,3999994,4005709,4008105,4009103,4013157,4016102,4017764,4020460,4027345,4046253, | 0| ZZEF1 | cmpl | cmpl | 0,0,2,1,1,0,0,0,2,0,0,0,1,0,2,0,1,0,1,2,1,0,2,2,2,2,1,0,1,0,1,0,2,0,0,1,0,2,0,1,2,0,0,2,0,1,1,2,2,1,2,1,1,0,0, |
 | 147| NM_001308237,NM_015534 | chr1| -| 78028100 | 78149112 | 78028100 | 78149112 | 16 | 78028100,78031765,78034016,78041752,78044458,78045211,78046682,78047460,78047663,78050201,78097534,78105133,78107068,78107206,78148269,78148946 | 78031469,78031866,78034151,78041905,78044554,78045313,78046754,78047576,78047811,78050340,78099090,78105287,78107131,78107340,78148343,78149112 | 0| ZZZ3| unk| unk| -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, |
 
-As you can see, the two records of the transcripts of the ZZZ3 gene have been merged into one record. The start and end of exons are updated as the coordinates after merging and the other information associated with coordinate is also updated according to the coordinates after merging. The column of transcript name is also updated as comma-separated transcript list.
+As you can see, the two records of the transcripts of the *ZZZ3* gene have been merged into one record. The start and end of exons are updated as the coordinates after merging and the other information associated with coordinate is also updated according to the coordinates after merging. The column of transcript name is also updated as comma-separated transcript list.
 
 - gpeFeature.pl
 
@@ -237,17 +239,17 @@ gpeFeature.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;-u --utr&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch UTRs in each transcript, 5'UTR then 3'UTR (or 3' first)
 >
-> &ensp;&ensp;&ensp;&ensp;-p --prime&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;&ensp;&ensp;5 for 5'UTR, 3 for 3'UTR(force -u)
+> &ensp;&ensp;&ensp;&ensp;-p --prime&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;&ensp;5 for 5'UTR, 3 for 3'UTR(force -u)
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--complete&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Only fetch UTR for completed transcripts
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--upstream&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;&ensp;Fetch upstream INT intergenic regions(force -g)
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--upstream&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Fetch upstream INT intergenic regions(force -g)
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--downstream&ensp;&ensp;INT&ensp;&ensp;Fetch downstream INT intergenice regions(force -g)
 >
-> &ensp;&ensp;&ensp;&ensp;-g  --chrSize&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;Tab-separated file with two columns: chr name and its length
+> &ensp;&ensp;&ensp;&ensp;-g  --chrSize&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;Tab-separated file with two columns: chr name and its length
 >
-> &ensp;&ensp;&ensp;&ensp;-s   --single&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Bundle all features into single line for each transcript
+> &ensp;&ensp;&ensp;&ensp;-s   --single&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Bundle all features into single line for each transcript
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--addIndex&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Add exon/intron/CDS/UTR index as suffix of name in the 4th column
 >
@@ -844,4 +846,4 @@ Refer to the help information for the format of the output result.
 
 # V. Get Help
 
-You can send the author [Sky](mailto:zhangsjsky@foxmail.com) any information about this toolkit, like bug reporting, performance improvement suggestion.
+You can send the author [Sky](mailto:zhangsjsky@foxmail.com) any information about this toolkit, like bug reporting and performance improvement suggestion.

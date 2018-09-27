@@ -11,7 +11,7 @@
     V. Get Help
 
 ## I. Introduction
-C & S's ToolKit (CSTK) is a package composed of perl, R, python and shell scripts. Using the specific script in the package or combination of scripts in the package as pipeline, may meet the general requirement of bioinfomatics analysis and complete miscellaneous tasks. Functions of CSTK pose but not limited in:
+&ensp;C & S's ToolKit (CSTK) is a package composed of perl, R, python and shell scripts. Using the specific script in the package or combination of scripts in the package as pipeline, may meet the general requirement of bioinfomatics analysis and complete miscellaneous tasks. Functions of CSTK pose but not limited in:
 
 1. File format converting
 2. Processing of standard file format
@@ -25,7 +25,7 @@ C & S's ToolKit (CSTK) is a package composed of perl, R, python and shell script
 
 ## II. Prerequisites
 
-​        CSTK mainly requires the following software/packages:
+&ensp;CSTK mainly requires the following software/packages:
 
 |Software/Package|Version|Description|
 |:---|:---|:---|
@@ -174,9 +174,9 @@ gpeMerge.pl -h
 
 ​        A diagram to intuitively illustrate the merging:
 
-![WechatIMG586](D:\我的坚果云\CSTK\WechatIMG586.jpeg)
+![Merging_Illustration](https://github.com/zhangsjsky/CSTK/blob/master/Merging_Illustration.jpeg)
 
-[^From C.]: From C.
+                                         From C.
 
 ​        In the figure, the first and second lines are the two transcripts of the same gene, the third line is the result after merging.
 

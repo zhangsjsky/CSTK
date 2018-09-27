@@ -25,7 +25,7 @@
 
 ## II. Prerequisites
 
-&ensp;CSTK mainly requires the following software/packages:
+        CSTK mainly requires the following software/packages:
 
 |Software/Package|Version|Description|
 |:---|:---|:---|

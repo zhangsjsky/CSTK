@@ -1,5 +1,5 @@
 # Table of Contents
-    I. Introduction
+    I. [Introduction](https://github.com/zhangsjsky/CSTK#i-introduction)
     II. Prerequisites
     III. Download and Install
     IV. Tutorial
@@ -10,15 +10,15 @@
 # I. Introduction
 C & S's ToolKit (CSTK) is a package composed of perl, R, python and shell scripts. Using the specific script in the package or combination of scripts in the package as pipeline, may meet the general requirement of bioinfomatics analysis and complete miscellaneous tasks. Functions of CSTK pose but not limited in:
 
-1. File format converting
-2. Processing of standard file format
-3. Table manipulation
-4. Statistical testing
-5. Survival analysis
-6. Data visualization
-7. Parser of third-party tool result
-8. Gene expression quantification
-9. Alternative splicing identification and quantification
+A. File format converting
+B. Processing of standard file format
+C. Table manipulation
+D. Statistical testing
+E. Survival analysis
+F. Data visualization
+G. Parser of third-party tool result
+H. Gene expression quantification
+I. Alternative splicing identification and quantification
 
 # II. Prerequisites
 
@@ -174,17 +174,17 @@ gpeMerge.pl -h
 > 
 > &ensp;&ensp;&ensp;&ensp;Output to STDOUT
 > 
-> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Have bin column
+> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Have bin column
 > 
-> &ensp;&ensp;&ensp;&ensp;-l --locus&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Merge with locus (default: merge gene)
+> &ensp;&ensp;&ensp;&ensp;-l --locus&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Merge with locus (default: merge gene)
 > 
-> &ensp;&ensp;&ensp;&ensp;-t --longTranscript&ensp;&ensp;Overlap is against long transcript (default against short transcript)
+> &ensp;&ensp;&ensp;&ensp;-t --longTranscript&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Overlap is against long transcript (default against short transcript)
 > 
-> &ensp;&ensp;&ensp;&ensp;-n --name&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
+> &ensp;&ensp;&ensp;&ensp;-n --name&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
 > 
-> &ensp;&ensp;&ensp;&ensp;-p --percent&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;DOU  Minimal overlap percent to merge transcript (default: 0)
+> &ensp;&ensp;&ensp;&ensp;-p --percent&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;DOU&ensp;&ensp;Minimal overlap percent to merge transcript (default: 0)
 > 
-> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
+> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 The function of this script is to merge different transcripts of the same gene (or the same locus if the -l option specified). The merging criterion is: for each site of a gene, if in any transcript the site is located in exon, the site is treated as exonic site in the merged result, otherwise treated as intronic site.
 
@@ -192,7 +192,9 @@ A diagram to intuitively illustrate the merging:
 
 ![Merging_Illustration](https://github.com/zhangsjsky/CSTK/blob/master/Merging_Illustration.jpeg)
 
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;From C.
+&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;From C.
+
+
 
 In the figure, the first and second lines are the two transcripts of the same gene, the third line is the result after merging.
 
@@ -225,29 +227,29 @@ gpeFeature.pl -h
 >
 > Option:
 >
-> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;With bin column
+> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;With bin column
 >
-> &ensp;&ensp;&ensp;&ensp;-i --intron&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch introns in each transcript
+> &ensp;&ensp;&ensp;&ensp;-i --intron&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch introns in each transcript
 >
-> &ensp;&ensp;&ensp;&ensp;-e --exon&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch exons in each transcript
+> &ensp;&ensp;&ensp;&ensp;-e --exon&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch exons in each transcript
 >
-> &ensp;&ensp;&ensp;&ensp;-c --cds&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch CDS in each transcript
+> &ensp;&ensp;&ensp;&ensp;-c --cds&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch CDS in each transcript
 >
-> &ensp;&ensp;&ensp;&ensp;-u --utr&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch UTRs in each transcript, 5'UTR then 3'UTR (or 3' first)
+> &ensp;&ensp;&ensp;&ensp;-u --utr&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch UTRs in each transcript, 5'UTR then 3'UTR (or 3' first)
 >
-> &ensp;&ensp;&ensp;&ensp;-p --prime&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;&ensp;5 for 5'UTR, 3 for 3'UTR(force -u)
+> &ensp;&ensp;&ensp;&ensp;-p --prime&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;&ensp;&ensp;5 for 5'UTR, 3 for 3'UTR(force -u)
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--complete&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Only fetch UTR for completed transcripts
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--complete&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Only fetch UTR for completed transcripts
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--upstream&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;&ensp;Fetch upstream INT intergenic regions(force -g)
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--upstream&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;&ensp;Fetch upstream INT intergenic regions(force -g)
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--downstream&ensp;&ensp;INT&ensp;&ensp;Fetch downstream INT intergenice regions(force -g)
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--downstream&ensp;&ensp;INT&ensp;&ensp;Fetch downstream INT intergenice regions(force -g)
 >
 > &ensp;&ensp;&ensp;&ensp;-g  --chrSize&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;Tab-separated file with two columns: chr name and its length
 >
 > &ensp;&ensp;&ensp;&ensp;-s   --single&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Bundle all features into single line for each transcript
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--addIndex&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Add exon/intron/CDS/UTR index as suffix of name in the 4th column
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--addIndex&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Add exon/intron/CDS/UTR index as suffix of name in the 4th column
 >
 > &ensp;&ensp;&ensp;&ensp;-h  --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
@@ -293,9 +295,9 @@ tsvFilter.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;If continuous range specified like '1-3-6', the first range '1-3' will be output
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;e.g.*:
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;*e.g.*:
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;-1 1,4     &ensp;&ensp;output columns 1,4
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;-1 1,4     &ensp;&ensp;&ensp;output columns 1,4
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;-1 1-4,6..8&ensp;output columns 1,2,3,4,6,7,8
 >
@@ -307,7 +309,7 @@ tsvFilter.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;More description about --targetFields, see --originFields
 >
-> &ensp;&ensp;&ensp;&ensp;-m --mode&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;To include or exclude lines in targetFile.tab, it can be i|include or e|exclude[e]
+> &ensp;&ensp;&ensp;&ensp;-m --mode&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;To include or exclude lines in targetFile.tab, it can be i|include or e|exclude[e]
 >
 > &ensp;&ensp;&ensp;&ensp;-s --separator&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;(Optional)A separator to join the fields specified, if necessary[Empty string]
 >
@@ -499,13 +501,13 @@ survival.R -h
 > 
 > &ensp;&ensp;&ensp;&ensp;-y|ylab&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;The ylab[Survival Probability]
 > 
-> &ensp;&ensp;&ensp;&ensp;-h&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Show help
+> &ensp;&ensp;&ensp;&ensp;-h&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Show help
 > 
 > Input (header isn't necessary):
 > 
 > &ensp;&ensp;Example1:
 > 
-> &ensp;&ensp;&ensp;&ensp;\#time  event
+> &ensp;&ensp;&ensp;&ensp;\#time&ensp;event
 > 
 > &ensp;&ensp;&ensp;&ensp;1&ensp;&ensp;&ensp;&ensp;&ensp;TRUE
 > 
@@ -521,7 +523,7 @@ survival.R -h
 > 
 > &ensp;&ensp;Example2:
 > 
-> &ensp;&ensp;&ensp;&ensp;\#time  event  &ensp;group
+> &ensp;&ensp;&ensp;&ensp;\#time&ensp;event  &ensp;group
 > 
 > &ensp;&ensp;&ensp;&ensp;1&ensp;&ensp;&ensp;&ensp;&ensp;TRUE&ensp;&ensp;male
 > 

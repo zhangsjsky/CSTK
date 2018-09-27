@@ -24,7 +24,7 @@ Usage: perl $scriptName -b region.bed INPUT.bam >RPKM.bed 2>running.log
 Note: INPUT.bam should be indexed with samtools index
       This script is for handling bam file in normal size that can be entirely cached into memory.
       It's MEMORY-CONSUMED but low TIME-CONSUMED compared to its equivalent regionRPKM_mem.pl.
-      Splited reads are handled now. Those that include the whole region within intron aren't counted.
+      Spliced reads are handled now. Those that include the whole region within intron aren't counted.
 Option:
     -b|bedFile  FILE    Region file in bed4 or bed6 format. bed plus is allowed.
     -l|libType  STR	The library type, it can be

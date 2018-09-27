@@ -387,6 +387,7 @@ tsvJoin.sh
 >
 >
 >
+>
 > Please specify at least one file
 
 This script is also often used in table manipulation. It's function is to join two table according to whether the values of one column or some columns are the same. Different from the join command built in Linux, this script can use the tab character as separated character.
@@ -854,4 +855,4 @@ Refer to the help information for the format of the output result.
 
 # V. Get Help
 
-You can send the author [Sky](mailto:zhangsjsky@foxmail.com) any information about this toolkit, like bug reporting and performance improvement suggestion.
+You can send the author [Sky](mailto:zhangsjsky@foxmail.com) any information about this toolkit, like bug reporting, typos and performance improvement suggestion.

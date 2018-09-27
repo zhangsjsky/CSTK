@@ -6,17 +6,31 @@ use File::Basename;
 use lib dirname $0;
 use pm::gpeParser;
 
-my($bin,$locus,$longTranscript,$name,$percent,$shortTranscript,$help);
+my($bin,$locus,$longTranscript,$name,$percent,$shortTranscript);
 $percent=0;
+sub usage{
+    my $scriptName = basename $0;
+print <<HELP;
+Usage: perl $scriptName input.gpe >output.gpe
+    If input.gpe not specified, input from STDIN
+    Output to STDOUT
+    -b --bin		     Have bin column
+    -l --locus               Merge with locus (default: merge gene)
+    -t --longTranscript	     Overlap is against long transcript (default against short transcript)
+    -n --name 		     Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
+    -p --percent	DOU  Minimal overlap percent to merge transcript (default: 0)
+    -h --help		     Print this help information
+HELP
+	exit(-1);
+}
 GetOptions(
-	    'b|bin'	=>	\$bin,
-        'l|locus'    =>      \$locus,
-	    't|longTranscript' =>	\$longTranscript,
-	    'n|name'	=>	\$name,
-	    'p|percent=f' =>	\$percent,
-	    'h|help'	=>	\$help
-	    )||usage(); 
-usage () if defined $help;
+    'b|bin'            => \$bin,
+    'l|locus'          => \$locus,
+    't|longTranscript' => \$longTranscript,
+    'n|name'           => \$name,
+    'p|percent=f'      => \$percent,
+    'h|help'           => sub{usage()}
+)||usage(); 
 
 $ARGV[0]='-' unless defined $ARGV[0];
 open GPE,"$ARGV[0]" or die "Can't open $ARGV[0]:$!";
@@ -237,20 +251,4 @@ sub stringJoin{
         }
     }
     return $finalString;
-}
-
-sub usage{
-    my $scriptName = basename $0;
-print <<HELP;
-Usage: perl $scriptName input.gpe >output.gpe
-    If input.gpe not specified, input from STDIN
-    Output to STDOUT
-    -b --bin		Have bin column
-    -l --locus          Merge with locus (default: merge gene)
-    -t --longTranscript	Overlap is against long transcript (default against short transcript)
-    -n --name 		Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
-    -p --percent	Minimal overlap percent to merge tracscript (default: 0)
-    -h --help		Print this help information
-HELP
-	exit(-1);
 }

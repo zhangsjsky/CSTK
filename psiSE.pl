@@ -143,7 +143,7 @@ Usage: perl $scriptName INPUT.bam >OUTPUT.bed6+
     If INPUT.bam isn't specified, input from STDIN
 Option:
     -b --bed          FILE    Gene models in bed12 format
-    -l|--libraryType  STR     The library type, it can be
+    -l --libraryType  STR     The library type, it can be
                                   fr-unstranded: for Standard Illumina (default)
                                   fr-firststrand: for dUTP, NSR, NNSR
                                   fr-secondstrand: for Ligation, Standard SOLiD and Illumina Directional Protocol
@@ -151,7 +151,7 @@ Option:
     -r --minRead      INT     Minimal supporting reads count for an exclusion junction[2]
     -h --help                 Print this help information
 Output:
-    The 4th column is the transcript name and the exon rank (in transcriptional direction) speparated by a dot.
+    The 4th column is the transcript name and the exon rank (in transcriptional direction) separated by a dot.
     The 5th column in OUTPUT.bed6+ is the PSI normalized into 0-1000.
     Additional columns are as follow:
         inclusion read count

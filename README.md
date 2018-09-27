@@ -90,7 +90,7 @@ fqConverter.pl -h
 > 
 > &ensp;&ensp;&ensp;&ensp;-t --target&ensp;&ensp;&ensp;STR&ensp;&ensp;The quality format of your target fastq file (fastq-illumina, fastq-solexa, [fastq])
 > 
-> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;This help information screen
+> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;This help information screen
 
 Since Fastq is the common file format for bioinformatics, the content of input file is not illustrated here. For details of Fastq format, please visit [wiki](https://en.wikipedia.org/wiki/FASTQ_format).
 
@@ -110,8 +110,6 @@ zcat myReads.fq.gz | fqConverter.pl | gzip -c >myReads.sanger.fq.gz
 
 In this way, the output fastq is stored as compressed gz file. In this analysis procedures, the CSTK script act only as the adapter in the pipeline, that is to fetch input from the output of the previous step and print output to the next step as its input.
 
-
-
 - gpe2bed.pl
 
 
@@ -120,23 +118,23 @@ gpe2bed.pl -h
 ```
 
 > Usage: perl gpe2bed.pl INPUT.gpe >OUTPUT.bed
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;If INPUT.gpe isn't specified, input from STDIN
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;Output to STDOUT
-> 
+>
 > Option:
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;With bin column
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-t --bedType&ensp;&ensp;INT&ensp;&ensp;Bed type. It can be 3, 6, 9 or 12[12]
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-i --itemRgb&ensp;&ensp;STR&ensp;&ensp;RGB color[0,0,0]
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-g --gene&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Output 'gene name' in INPUT.gpe as bed plus column
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-p --plus&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Output bed plus when there are additional columns in gpe
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 Assuming there is an input file (example.gpe) with the following contents:
@@ -179,17 +177,17 @@ gpeMerge.pl -h
 > 
 > &ensp;&ensp;&ensp;&ensp;Output to STDOUT
 > 
-> &ensp;&ensp;&ensp;&ensp;-b --bin     Have bin column
+> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Have bin column
 > 
-> &ensp;&ensp;&ensp;&ensp;-l --locus                   Merge with locus (default: merge gene)
+> &ensp;&ensp;&ensp;&ensp;-l --locus&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Merge with locus (default: merge gene)
 > 
-> &ensp;&ensp;&ensp;&ensp;-t --longTranscript  Overlap is against long transcript (default against short transcript)
+> &ensp;&ensp;&ensp;&ensp;-t --longTranscript&ensp;&ensp;Overlap is against long transcript (default against short transcript)
 > 
-> &ensp;&ensp;&ensp;&ensp;-n --name                 Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
+> &ensp;&ensp;&ensp;&ensp;-n --name&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
 > 
-> &ensp;&ensp;&ensp;&ensp;-p --percent             Minimal overlap percent to merge tracscript (default: 0)
+> &ensp;&ensp;&ensp;&ensp;-p --percent&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;DOU  Minimal overlap percent to merge transcript (default: 0)
 > 
-> &ensp;&ensp;&ensp;&ensp;-h --help                   Print this help information
+> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 The function of this script is to merge different transcripts of the same gene (or the same locus if the -l option specified). The merging criterion is: for each site of a gene, if in any transcript the site is located in exon, the site is treated as exonic site in the merged result, otherwise treated as intronic site.
 
@@ -197,7 +195,7 @@ A diagram to intuitively illustrate the merging:
 
 ![Merging_Illustration](https://github.com/zhangsjsky/CSTK/blob/master/Merging_Illustration.jpeg)
 
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;From C.
+&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;From C.
 
 In the figure, the first and second lines are the two transcripts of the same gene, the third line is the result after merging.
 
@@ -216,8 +214,6 @@ The content of the output:
 
 As you can see, the two records of the transcripts of the ZZZ3 gene have been merged into one record. The start and end of exons are updated as the coordinates after merging and the other information associated with coordinate is also updated according to the coordinates after merging. The column of transcript name is also updated as comma-separated transcript list.
 
-
-
 - gpeFeature.pl
 
 ``` bash
@@ -225,38 +221,38 @@ gpeFeature.pl -h
 ```
 
 > Usage: perl gpeFeature.pl OPTION INPUT.gpe >OUTPUT.bed
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;If INPUT.gpe isn't specified, input from STDIN
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;Example: perl gpeFeature.pl -b -g hg19.size --upstream 1000 hg19.refGene.gpe >hg19.refGene.bed
-> 
+>
 > Option:
-> 
-> &ensp;&ensp;&ensp;&ensp;-b --bin                           With bin column
-> 
-> &ensp;&ensp;&ensp;&ensp;-i --intron                        Fetch introns in each transcript
-> 
-> &ensp;&ensp;&ensp;&ensp;-e --exon                         Fetch exons in each transcript
-> 
-> &ensp;&ensp;&ensp;&ensp;-c --cds                            Fetch CDS in each transcript
-> 
-> &ensp;&ensp;&ensp;&ensp;-u --utr                            Fetch UTRs in each transcript, 5'UTR then 3'UTR (or 3' first)
-> 
-> &ensp;&ensp;&ensp;&ensp;-p --prime            INT     5 for 5'UTR, 3 for 3'UTR(force -u)
-> 
-> &ensp;&ensp;&ensp;&ensp;--complete                 Only fetch UTR for completed transcripts
-> 
-> &ensp;&ensp;&ensp;&ensp;--upstream      INT    Fetch upstream INT intergenic regions(force -g)
-> 
-> &ensp;&ensp;&ensp;&ensp;--downstream INT     Fetch downstream INT intergenice regions(force -g)
-> 
-> &ensp;&ensp;&ensp;&ensp;-g  --chrSize           FILE   Tab-separated file with two columns: chr name and its length
-> 
-> &ensp;&ensp;&ensp;&ensp;-s   --single                       Bundle all features into single line for each transcript
-> 
-> &ensp;&ensp;&ensp;&ensp;--addIndex                 Add exon/intron/CDS/UTR index as suffix of name in the 4th column
-> 
-> &ensp;&ensp;&ensp;&ensp;-h  --help                          Print this help information
+>
+> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;With bin column
+>
+> &ensp;&ensp;&ensp;&ensp;-i --intron&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch introns in each transcript
+>
+> &ensp;&ensp;&ensp;&ensp;-e --exon&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch exons in each transcript
+>
+> &ensp;&ensp;&ensp;&ensp;-c --cds&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch CDS in each transcript
+>
+> &ensp;&ensp;&ensp;&ensp;-u --utr&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Fetch UTRs in each transcript, 5'UTR then 3'UTR (or 3' first)
+>
+> &ensp;&ensp;&ensp;&ensp;-p --prime&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;5 for 5'UTR, 3 for 3'UTR(force -u)
+>
+> &ensp;&ensp;&ensp;&ensp;--complete&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Only fetch UTR for completed transcripts
+>
+> &ensp;&ensp;&ensp;&ensp;--upstream&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Fetch upstream INT intergenic regions(force -g)
+>
+> &ensp;&ensp;&ensp;&ensp;--downstream&ensp;&ensp;INT&ensp;&ensp;Fetch downstream INT intergenice regions(force -g)
+>
+> &ensp;&ensp;&ensp;&ensp;-g  --chrSize&ensp;&ensp;&ensp;&ensp;FILE&ensp;Tab-separated file with two columns: chr name and its length
+>
+> &ensp;&ensp;&ensp;&ensp;-s   --single&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Bundle all features into single line for each transcript
+>
+> &ensp;&ensp;&ensp;&ensp;--addIndex&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Add exon/intron/CDS/UTR index as suffix of name in the 4th column
+>
+> &ensp;&ensp;&ensp;&ensp;-h  --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 This script is used to extract specific feature from the gpe file and output in bed format.
 
@@ -290,17 +286,17 @@ tsvFilter.pl -h
 >
 > Option:
 >
-> &ensp;&ensp;&ensp;&ensp;-o --originFile      TSV    The original file containing fields (specified by --originFields) used to include or exclude lines in targetFile.tab
+> &ensp;&ensp;&ensp;&ensp;-o --originFile&ensp;&ensp;&ensp;&ensp;TSV&ensp;&ensp;The original file containing fields (specified by --originFields) used to include or exclude lines in targetFile.tab
 >
-> &ensp;&ensp;&ensp;&ensp;-1 --originFields  STR    Comma-separated field list specifying which fileds in the originFile.tab to be used to include or exclude, 1-based start [1]
+> &ensp;&ensp;&ensp;&ensp;-1 --originFields&ensp;&ensp;STR&ensp;&ensp;Comma-separated field list specifying which fileds in the originFile.tab to be used to include or exclude, 1-based start [1]
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;The element of the list can be a single column number or a range with nonnumeric char as separator
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;The element of the list can be a single column number or a range with nonnumeric char as separator
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;To specify the last column left the range right margin blank
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;To specify the last column left the range right margin blank
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;If continuous range specified like '1-3-6', the first range '1-3' will be output
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;If continuous range specified like '1-3-6', the first range '1-3' will be output
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;*e.g.*:
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;e.g.*:
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;-1 1,4          output columns 1,4
 >
@@ -310,15 +306,15 @@ tsvFilter.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;-1 1-3-6        output columns 1,2,3
 >
-> &ensp;&ensp;&ensp;&ensp;-2 --targetFields   STR   Comma-separated field list specifying which fileds in the targetFile.tab are used to include or exclude lines, 1-based start [1]
+> &ensp;&ensp;&ensp;&ensp;-2 --targetFields&ensp;&ensp;STR&ensp;&ensp;Comma-separated field list specifying which fileds in the targetFile.tab are used to include or exclude lines, 1-based start [1]
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;More description about --targetFields, see --originFields
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;More description about --targetFields, see --originFields
 >
-> &ensp;&ensp;&ensp;&ensp;-m --mode             STR  To include or exclude lines in targetFile.tab, it can be i|include or e|exclude[e]
+> &ensp;&ensp;&ensp;&ensp;-m --mode&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;To include or exclude lines in targetFile.tab, it can be i|include or e|exclude[e]
 >
-> &ensp;&ensp;&ensp;&ensp;-s --separator        STR   (Optional)A separator to join the fields specified, if necessary[Empty string]
+> &ensp;&ensp;&ensp;&ensp;-s --separator&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;(Optional)A separator to join the fields specified, if necessary[Empty string]
 >
-> &ensp;&ensp;&ensp;&ensp;-h --help                           Print this help information
+> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 This script is often used in table manipulation. It's function is to filter the target table according to one column or some columns (i.g. the target columns) with one or some columns (i.g. the source column) of another table (i.g. source table). The mode it's based is whether target columns include (or exclude) the source columns.
 
@@ -366,19 +362,19 @@ tsvJoin.sh
 >
 > Options:
 >
-> -1|field1                     STR  The field in input1.tsv used when joining[1]
+> -1|field1&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;The field in input1.tsv used when joining[1]
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Refer to the -1 option of linux join command
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Refer to the -1 option of linux join command
 >
-> -2 field2                      STR  The field in input2.tsv used when joining[1]
+> -2 field2&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;The field in input2.tsv used when joining[1]
 >
-> -i|inputDelimiter      STR  The delimiter of your input file[\t]
+> -i|inputDelimiter&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;The delimiter of your input file[\t]
 >
-> -j|joinDelimiter         STR  The delimiter used by linux join commond (i.e. the -t option of join command)[|]
+> -j|joinDelimiter&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;The delimiter used by linux join commond (i.e. the -t option of join command)[|]
 >
-> -o|outputDelimiter  STR  The delimiter of the output[\t]
+> -o|outputDelimiter&ensp;&ensp;STR&ensp;&ensp;The delimiter of the output[\t]
 >
-> -a|unpairedFile        INT   Also print unpairable lines from file INT (1, 2)
+> -a|unpairedFile&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Also print unpairable lines from file INT (1, 2)
 >
 >
 >
@@ -414,11 +410,11 @@ testT.R -h
 > 
 > Option:
 > 
-> &ensp;&ensp;&ensp;&ensp;-p|pair            Pair
+> &ensp;&ensp;&ensp;&ensp;-p|pair&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Pair
 > 
-> &ensp;&ensp;&ensp;&ensp;-a|alt      STR  The alternative hypothesis: [two.sided], greatr or less
+> &ensp;&ensp;&ensp;&ensp;-a|alt&ensp;&ensp;STR&ensp;&ensp;The alternative hypothesis: [two.sided], greatr or less
 > 
-> &ensp;&ensp;&ensp;&ensp;-h                     Show help
+> &ensp;&ensp;&ensp;&ensp;-h&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Show help
 
 This script is used to conduct T-test testing. '<input.lst|<input1.lst input2.lst|input1.lst input2.lst' means there are a few input manners: A) Input one file from STDIN; B) Input from STDIN and option file, respectively; C) Input from two option files, respectively. The commonly used manner is the third one:
 
@@ -465,13 +461,13 @@ testWilcoxon.R -h
 > 
 > Options
 > 
-> &ensp;&ensp;&ensp;&ensp;-a|alt      STR     The alternative hypothesis ([two.sided], greater, less)
+> &ensp;&ensp;&ensp;&ensp;-a|alt&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;The alternative hypothesis ([two.sided], greater, less)
 > 
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;You can specify just the initial letter
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;You can specify just the initial letter
 > 
-> &ensp;&ensp;&ensp;&ensp;-m|mu   DOU   A parameter used to form the null hypothesis for one-sample test[0]
+> &ensp;&ensp;&ensp;&ensp;-m|mu&ensp;&ensp;DOU&ensp;&ensp;A parameter used to form the null hypothesis for one-sample test[0]
 > 
-> &ensp;&ensp;&ensp;&ensp;-h|help              Show help
+> &ensp;&ensp;&ensp;&ensp;-h|help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Show help
 
 ```` bash
 testWilcoxon.R value1.lst value2.lst 2>/dev/null
@@ -491,55 +487,55 @@ survival.R -h
 > Usage: survival.R -option=value <input.tsv
 > 
 > Option:
-> &ensp;&ensp;&ensp;&ensp;-p|pdf       PDF  The KM figure[KM.pdf]
+> &ensp;&ensp;&ensp;&ensp;-p|pdf&ensp;&ensp;&ensp;&ensp;&ensp;PDF&ensp;&ensp;The KM figure[KM.pdf]
 > 
-> &ensp;&ensp;&ensp;&ensp;-w|width   INT   The figure width
+> &ensp;&ensp;&ensp;&ensp;-w|width&ensp;&ensp;&ensp;INT&ensp;&ensp;The figure width
 > 
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;height   INT   The figure height
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;height&ensp;&ensp;INT&ensp;&ensp;The figure height
 > 
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;header           With header
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;header&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;With header
 > 
-> &ensp;&ensp;&ensp;&ensp;-m|main   STR   The main title
+> &ensp;&ensp;&ensp;&ensp;-m|main&ensp;&ensp;&ensp;STR&ensp;&ensp;The main title
 > 
-> &ensp;&ensp;&ensp;&ensp;-x|xlab      STR   The xlab[Time]
+> &ensp;&ensp;&ensp;&ensp;-x|xlab&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;The xlab[Time]
 > 
-> &ensp;&ensp;&ensp;&ensp;-y|ylab      STR   The ylab[Survival Probability]
+> &ensp;&ensp;&ensp;&ensp;-y|ylab&ensp;&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;The ylab[Survival Probability]
 > 
-> &ensp;&ensp;&ensp;&ensp;-h                         Show help
+> &ensp;&ensp;&ensp;&ensp;-h&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Show help
 > 
-> &ensp;&ensp;&ensp;&ensp;Input (header isn't necessary):
+> Input (header isn't necessary):
 > 
 > &ensp;&ensp;Example1:
 > 
-> &ensp;&ensp;\#time  event
+> &ensp;&ensp;&ensp;&ensp;\#time  event
 > 
-> &ensp;&ensp;&ensp;&ensp;1          TRUE
+> &ensp;&ensp;&ensp;&ensp;1&ensp;&ensp;&ensp;&ensp;&ensp;TRUE
 > 
-> &ensp;&ensp;&ensp;&ensp;2          TRUE
+> &ensp;&ensp;&ensp;&ensp;2&ensp;&ensp;&ensp;&ensp;&ensp;TRUE
 > 
-> &ensp;&ensp;&ensp;&ensp;2          TRUE
+> &ensp;&ensp;&ensp;&ensp;2&ensp;&ensp;&ensp;&ensp;&ensp;TRUE
 > 
-> &ensp;&ensp;&ensp;&ensp;8          FALSE
+> &ensp;&ensp;&ensp;&ensp;8&ensp;&ensp;&ensp;&ensp;&ensp;FALSE
 > 
-> &ensp;&ensp;&ensp;&ensp;5          TRUE
+> &ensp;&ensp;&ensp;&ensp;5&ensp;&ensp;&ensp;&ensp;&ensp;TRUE
 > 
-> &ensp;&ensp;&ensp;&ensp;10        FALSE
+> &ensp;&ensp;&ensp;&ensp;10&ensp;&ensp;&ensp;&ensp;FALSE
 > 
 > &ensp;&ensp;Example2:
 > 
 > &ensp;&ensp;&ensp;&ensp;\#time  event  group
 > 
-> &ensp;&ensp;&ensp;&ensp;1          TRUE   male
+> &ensp;&ensp;&ensp;&ensp;1&ensp;&ensp;&ensp;&ensp;&ensp;TRUE&ensp;&ensp;male
 > 
-> &ensp;&ensp;&ensp;&ensp;2          TRUE   male
+> &ensp;&ensp;&ensp;&ensp;2&ensp;&ensp;&ensp;&ensp;&ensp;TRUE&ensp;&ensp;male
 > 
-> &ensp;&ensp;&ensp;&ensp;2          TRUE   male
+> &ensp;&ensp;&ensp;&ensp;2&ensp;&ensp;&ensp;&ensp;&ensp;TRUE&ensp;&ensp;male
 > 
-> &ensp;&ensp;&ensp;&ensp;8          FALSE  male
+> &ensp;&ensp;&ensp;&ensp;8&ensp;&ensp;&ensp;&ensp;&ensp;FALSE&ensp;&ensp;male
 > 
-> &ensp;&ensp;&ensp;&ensp;5          TRUE   female
+> &ensp;&ensp;&ensp;&ensp;5&ensp;&ensp;&ensp;&ensp;&ensp;TRUE&ensp;&ensp;female
 > 
-> &ensp;&ensp;&ensp;&ensp;10        FALSE  female
+> &ensp;&ensp;&ensp;&ensp;10&ensp;&ensp;&ensp;&ensp;FALSE&ensp;&ensp;female
 
 As the help information presents, creating an input file as the Example2 (survival.tsv). Feed it to the script as input and specify the output pdf file:
 
@@ -564,23 +560,23 @@ bar.R -h
 > 
 > Common:
 > 
-> &ensp;&ensp;&ensp;&ensp;-p|pdf          FILE    The output figure in pdf[figure.pdf]
+> &ensp;&ensp;&ensp;&ensp;-p|pdf&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;The output figure in pdf[figure.pdf]
 > 
-> &ensp;&ensp;&ensp;&ensp;-w|width     INT     The figure width
+> &ensp;&ensp;&ensp;&ensp;-w|width&ensp;&ensp;INT&ensp;&ensp;The figure width
 > 
-> &ensp;&ensp;&ensp;&ensp;-height         INT     The figure height
+> &ensp;&ensp;&ensp;&ensp;-height&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;The figure height
 > 
-> &ensp;&ensp;&ensp;&ensp;-m|main      STR    The main title
+> &ensp;&ensp;&ensp;&ensp;-m|main&ensp;&ensp;&ensp;STR&ensp;&ensp;The main title
 > 
 > Contents omitted…
 > 
-> &ensp;&ensp;&ensp;&ensp;-annoTxt         STRs    The comma-separated texts to be annotated
+> &ensp;&ensp;&ensp;&ensp;-annoTxt&ensp;&ensp;&ensp;STRs&ensp;&ensp;The comma-separated texts to be annotated
 > 
-> &ensp;&ensp;&ensp;&ensp;-annoTxtX       INTs    The comma-separated X positions of text
+> &ensp;&ensp;&ensp;&ensp;-annoTxtX&ensp;&ensp;INTs&ensp;&ensp;The comma-separated X positions of text
 > 
-> &ensp;&ensp;&ensp;&ensp;-annoTxtY       INTs    The comma-separated Y positions of text
+> &ensp;&ensp;&ensp;&ensp;-annoTxtY&ensp;&ensp;INTs&ensp;&ensp;The comma-separated Y positions of text
 > 
-> &ensp;&ensp;&ensp;&ensp;-annoTxtS       DOU    The annotated text size[5]
+> &ensp;&ensp;&ensp;&ensp;-annoTxtS&ensp;&ensp;DOU&ensp;&ensp;The annotated text size[5]
 > 
 > Skill:
 > 
@@ -607,8 +603,6 @@ The extra patient ID information is added as the first column and will be presen
 
 In the parameters of bar.R, -fillV=V3 tells it to use the third column (column name: V3) to color bars. Don't specify this option if no third column. -x and -y specify the label of X and Y axis, respectively. -fillT specify the title of the fill-legend.
 
-
-
 - hist.R
 
 ``` bash
@@ -621,25 +615,25 @@ hist.R -h
 > 
 > &ensp;&ensp;&ensp;&ensp;Common:
 > 
-> &ensp;&ensp;&ensp;&ensp;-p|pdf          FILE     The output figure in pdf[figure.pdf]
+> &ensp;&ensp;&ensp;&ensp;-p|pdf&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;&ensp;The output figure in pdf[figure.pdf]
 > 
-> &ensp;&ensp;&ensp;&ensp;-w|width     INT      The figure width
+> &ensp;&ensp;&ensp;&ensp;-w|width&ensp;&ensp;INT&ensp;&ensp;&ensp;The figure width
 > 
-> &ensp;&ensp;&ensp;&ensp;-m|main      STR     The main title
+> &ensp;&ensp;&ensp;&ensp;-m|main&ensp;&ensp;STR&ensp;&ensp;&ensp;The main title
 > 
-> &ensp;&ensp;&ensp;&ensp;-mainS         DOU    The size of main title[22 for ggplot]
+> &ensp;&ensp;&ensp;&ensp;-mainS&ensp;&ensp;&ensp;&ensp;DOU&ensp;&ensp;The size of main title[22 for ggplot]
 > 
-> &ensp;&ensp;&ensp;&ensp;-x|xlab         STR     The xlab[Binned Values]
+> &ensp;&ensp;&ensp;&ensp;-x|xlab&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;&ensp;The xlab[Binned Values]
 > 
-> &ensp;&ensp;&ensp;&ensp;-y|ylab         STR     The ylab
+> &ensp;&ensp;&ensp;&ensp;-y|ylab&ensp;&ensp;&ensp;&ensp;STR&ensp;&ensp;&ensp;The ylab
 > 
 > Contents omitted…
 > 
-> &ensp;&ensp;&ensp;&ensp;-annoTxt      STRs    The comma-separated texts to be annotated
+> &ensp;&ensp;&ensp;&ensp;-annoTxt&ensp;&ensp;&ensp;STRs&ensp;&ensp;The comma-separated texts to be annotated
 > 
-> &ensp;&ensp;&ensp;&ensp;-annoTxtX    INTs    The comma-separated X positions of text
+> &ensp;&ensp;&ensp;&ensp;-annoTxtX&ensp;&ensp;INTs&ensp;&ensp;The comma-separated X positions of text
 > 
-> &ensp;&ensp;&ensp;&ensp;-annoTxtY    INTs    The comma-separated Y positions of text
+> &ensp;&ensp;&ensp;&ensp;-annoTxtY&ensp;&ensp;INTs&ensp;&ensp;The comma-separated Y positions of text
 > 
 > Skill:
 > 
@@ -663,13 +657,13 @@ coverageBedParser.pl -h
 
 > Usage: perl coverageBedParser.pl coverageBedOutput.tsv >OUTPUT.tsv
 > 
-> If coverageBedOutput.tsv isn't specified, input from STDIN
+> &ensp;&ensp;&ensp;&ensp;If coverageBedOutput.tsv isn't specified, input from STDIN
 > 
 > Option:
 > 
-> -b  -bedFormat  INT  Bed format ([3], 6)
+> &ensp;&ensp;&ensp;&ensp;-b  -bedFormat&ensp;&ensp;INT&ensp;&ensp;Bed format ([3], 6)
 > 
-> -h  --help                     Print this help information
+> &ensp;&ensp;&ensp;&ensp;-h  --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 
 This script is used to parse the output result of 'bedtools coverage', calculate the mean depth and covered fraction of each region.
@@ -686,11 +680,11 @@ fastqcParser.pl -h
 
 > Usage: perl fastqcParser.pl OPTION fastqc_data.txt >OUTPUT.tsv
 > 
-> If INPUT isn't specified, input from STDIN
+> &ensp;&ensp;&ensp;&ensp;If INPUT isn't specified, input from STDIN
 > 
 > Options:
 > 
-> &ensp;&ensp;&ensp;&ensp;-h  --help                      Print this help information
+> &ensp;&ensp;&ensp;&ensp;-h  --help&ensp;&ensp;Print this help information
 
 This script is used to parse the result (in general, the fastqc_data.txt) of FastQC, extract read-count, GC content and mean quality *etc*. and output as a table.
 
@@ -716,11 +710,11 @@ geneRPKM.pl -h
 > 
 > Option:
 > 
-> &ensp;&ensp;&ensp;&ensp;-g --gpe         FILE   A gpe file with comment or track line allowed
+> &ensp;&ensp;&ensp;&ensp;-g --gpe&ensp;&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;A gpe file with comment or track line allowed
 > 
-> &ensp;&ensp;&ensp;&ensp;-b --bin                    With bin column
+> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;With bin column
 > 
-> &ensp;&ensp;&ensp;&ensp;-l --libType    STR    The library type, it can be
+> &ensp;&ensp;&ensp;&ensp;-l --libType&ensp;&ensp;STR&ensp;&ensp;The library type, it can be
 > 
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;fr-unstranded: for Standard Illumina (default)
 > 
@@ -728,13 +722,13 @@ geneRPKM.pl -h
 > 
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;fr-secondstrand: for Ligation, Standard SOLiD and Illumina Directional Protocol
 > 
-> &ensp;&ensp;&ensp;&ensp;-s --slop         INT    Specify the slopping length from the exon-intron joint to intron[0]
+> &ensp;&ensp;&ensp;&ensp;-s --slop&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Specify the slopping length from the exon-intron joint to intron[0]
 > 
-> &ensp;&ensp;&ensp;&ensp;-u --uniq                  Only use uniquely-mapped reads (NH=1)to compute RPKM
+> &ensp;&ensp;&ensp;&ensp;-u --uniq&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Only use uniquely-mapped reads (NH=1)to compute RPKM
 > 
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--log          FILE   Record running log into FILE
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--log&ensp;&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;Record running log into FILE
 > 
-> &ensp;&ensp;&ensp;&ensp;-h --help                  Print this help information
+> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 As the help information describes, this script chooses the longest transcript of each gene as the reference to quantify the expression of each gene with RPKM. The output result is stored in bed6+. An running example:
 
@@ -745,8 +739,6 @@ geneRPKM.pl -g refGene.gpe -b -s 4 final.bam >RPKM.bed6+ 2>geneRPKM.log
 In the command, -s option specifies the length in which reads can extend from exon into intron. This option is devised to handle the situation that reads may be incapable of spanning an intron to be aligned to the adjacent exon with a few base-pair.
 
 This script may consume too much memory (depend on the size of the input bam file). If the memory isn't enough on the machine, the script geneRPKM_mem.pl, which consumes little memory but runs slowly, may be a alternative choice.
-
-
 
 - regionRPKM.pl
 
@@ -770,9 +762,9 @@ regionRPKM.pl -h
 > 
 > Option:
 > 
-> &ensp;&ensp;&ensp;&ensp;-b|bedFile  FILE    Region file in bed4 or bed6 format. bed plus is allowed.
+> &ensp;&ensp;&ensp;&ensp;-b|bedFile&ensp;&ensp;FILE&ensp;&ensp;Region file in bed4 or bed6 format. bed plus is allowed.
 > 
-> &ensp;&ensp;&ensp;&ensp;-l|libType    STR    The library type, it can be
+> &ensp;&ensp;&ensp;&ensp;-l|libType&ensp;&ensp;&ensp;STR&ensp;&ensp;The library type, it can be
 > 
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;fr-unstranded: for Standard Illumina (default)
 > 
@@ -780,7 +772,7 @@ regionRPKM.pl -h
 > 
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;fr-secondstrand: for Ligation, Standard SOLiD and Illumina Directional Protocol
 > 
-> &ensp;&ensp;&ensp;&ensp;-h --help                     Print this help information
+> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 This script calculates the RPKM of specific regions (specified by --bedFile option). An running example:
 
@@ -801,45 +793,45 @@ psiSE.pl -h
 ```
 
 > Usage: perl psiSE.pl INPUT.bam >OUTPUT.bed6+
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;If INPUT.bam isn't specified, input from STDIN
-> 
+>
 > Option:
-> 
-> &ensp;&ensp;&ensp;&ensp;-b --bed               FILE    Gene models in bed12 format
-> 
-> &ensp;&ensp;&ensp;&ensp;-l|--libraryType  STR     The library type, it can be
-> 
+>
+> &ensp;&ensp;&ensp;&ensp;-b --bed&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;Gene models in bed12 format
+>
+> &ensp;&ensp;&ensp;&ensp;-l --libraryType&ensp;&ensp;STR&ensp;&ensp;The library type, it can be
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;fr-unstranded: for Standard Illumina (default)
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;fr-firststrand: for dUTP, NSR, NNSR
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;fr-secondstrand: for Ligation, Standard SOLiD and Illumina Directional Protocol
-> 
-> &ensp;&ensp;&ensp;&ensp;-s --slop                INT     Maximal slope length for a read to be considered as exonic read[4]
-> 
-> &ensp;&ensp;&ensp;&ensp;-r --minRead        INT     Minimal supporting reads count for an exclusion junction[2]
-> 
-> &ensp;&ensp;&ensp;&ensp;-h --help                           Print this help information
-> 
+>
+> &ensp;&ensp;&ensp;&ensp;-s --slop&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Maximal slope length for a read to be considered as exonic read[4]
+>
+> &ensp;&ensp;&ensp;&ensp;-r --minRead&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Minimal supporting reads count for an exclusion junction[2]
+>
+> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
+>
 > Output:
-> 
-> &ensp;&ensp;&ensp;&ensp;The 4th column is the transcript name and the exon rank (in transcriptional direction) speparated by a dot.
-> 
+>
+> &ensp;&ensp;&ensp;&ensp;The 4th column is the transcript name and the exon rank (in transcriptional direction) separated by a dot.
+>
 > &ensp;&ensp;&ensp;&ensp;The 5th column in OUTPUT.bed6+ is the PSI normalized into 0-1000.
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;Additional columns are as follow:
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;inclusion read count
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;inclusion region length
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;inclusion read density
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;exclusion read counts separated by comma
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;exclusion region lengths separated by comma
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;exclusion read density
 
 This script is used to identify and quantify the PSI of SE event from the alignments. An using example:

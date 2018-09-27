@@ -11,13 +11,21 @@
 C & S's ToolKit (CSTK) is a package composed of perl, R, python and shell scripts. Using the specific script in the package or combination of scripts in the package as pipeline, may meet the general requirement of bioinfomatics analysis and complete miscellaneous tasks. Functions of CSTK pose but not limited in:
 
 A. File format converting
+
 B. Processing of standard file format
+
 C. Table manipulation
+
 D. Statistical testing
+
 E. Survival analysis
+
 F. Data visualization
+
 G. Parser of third-party tool result
+
 H. Gene expression quantification
+
 I. Alternative splicing identification and quantification
 
 # II. Prerequisites
@@ -299,7 +307,7 @@ tsvFilter.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;*e.g.*:
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;-1 1,4     &ensp;&ensp;&ensp;output columns 1,4
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;-1 1,4     &ensp;&ensp;&ensp;&ensp;output columns 1,4
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;-1 1-4,6..8&ensp;output columns 1,2,3,4,6,7,8
 >

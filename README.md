@@ -86,11 +86,11 @@ fqConverter.pl -h
 > 
 > &ensp;&ensp;&ensp;&ensp;If INPUT isn't specified, input from STDIN
 > 
-> &ensp;&ensp;&ensp;&ensp;-s  --source  STR   The quality format of your source fastq file ([fastq-illumina], fastq-solexa, fastq)
+> &ensp;&ensp;&ensp;&ensp;-s --source&ensp;&ensp;STR&ensp;&ensp;The quality format of your source fastq file ([fastq-illumina], fastq-solexa, fastq)
 > 
-> &ensp;&ensp;&ensp;&ensp;-t  --target    STR   The quality format of your target fastq file (fastq-illumina, fastq-solexa, [fastq])
+> &ensp;&ensp;&ensp;&ensp;-t --target&ensp;&ensp;&ensp;STR&ensp;&ensp;The quality format of your target fastq file (fastq-illumina, fastq-solexa, [fastq])
 > 
-> &ensp;&ensp;&ensp;&ensp;-h  --help                This help information screen
+> &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;This help information screen
 
 Since Fastq is the common file format for bioinformatics, the content of input file is not illustrated here. For details of Fastq format, please visit [wiki](https://en.wikipedia.org/wiki/FASTQ_format).
 
@@ -101,7 +101,7 @@ zcat myReads.fq.gz | fqConverter.pl >myReads.sanger.fq
 ```
 
 The command converts the fastq in illumina format (default of -s option) to the famous sanger format (default of -t option).
-    
+
 Pipeline is applied in the command to illustrated the advantage of piping the CSTK. You can also further improved it as:
 
 ``` bash
@@ -120,14 +120,23 @@ gpe2bed.pl -h
 ```
 
 > Usage: perl gpe2bed.pl INPUT.gpe >OUTPUT.bed
+> 
 > ​        If INPUT.gpe isn't specified, input from STDIN
+> 
 > ​        Output to STDOUT
+> 
 > Option:
+> 
 > ​        -b --bin                      With bin column
+> 
 > ​        -t --bedType    INT   Bed type. It can be 3, 6, 9 or 12[12]
+> 
 > ​        -i --itemRgb    STR   RGB color[0,0,0]
+> 
 > ​        -g --gene                  Output 'gene name' in INPUT.gpe as bed plus column
+> 
 > ​        -p --plus                   Output bed plus when there are additional columns in gpe
+> 
 > ​        -h --help                   Print this help information
 
 Assuming there is an input file (example.gpe) with the following contents:
@@ -148,7 +157,7 @@ gpe2bed.pl -b example.gpe >example.bed
 
 The content of the output bed file:
 
-|||||| |||||||
+|||||||||||||
 | ------------ | ---- | -------- | ---- | ------------------------------------------------------------ | ----- | ---------------- | -------- | -------- | -------- | -------- | ---- |
 | chr17 | 3907738| 4046253| NM_015113| 0| -| 3910183| 4046189| 0,0,0 | 55 | 2526,72,154,166,99,169,144,360,136,101,192,120,200,133,175,278,140,151,152,263,166,139,130,162,120,165,469,94,80,241,149,202,82,167,123,122,160,115,68,134,170,101,216,112,149,92,99,179,117,211,200,172,195,145,418 | 0,4438,5159,9004,9645,9902,11878,12926,13391,15224,16684,18264,20474,27681,28383,29570,37984,39779,45263,46336,47526,49612,51771,53549,54726,58308,59916,62002,62718,66239,68163,69705,70652,70818,72192,72423,73438,76931,77992,81225,82041,82989,84233,86274,91386,92164,97872,100188,101248,105208,108164,109854,112527,119462,138097 |
 | chr1| 78028100 | 78149112 | NM_001308237 | 0| -| 78031324 | 78105156 | 0,0,0 | 14 | 3369,101,135,153,96,102,72,116,148,139,154,63,134,166| 0,3665,5916,13652,16358,17111,18582,19360,19563,22101,77033,78968,79106,120846 |
@@ -166,12 +175,19 @@ gpeMerge.pl -h
 
 > Usage: perl gpeMerge.pl input.gpe >output.gpe
 > ​        If input.gpe not specified, input from STDIN
+> 
 > ​        Output to STDOUT
+> 
 > ​        -b --bin     Have bin column
+> 
 > ​        -l --locus                   Merge with locus (default: merge gene)
+> 
 > ​        -t --longTranscript  Overlap is against long transcript (default against short transcript)
-> ​        -n --name                 Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable 
+> 
+> ​        -n --name                 Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
+> 
 > ​        -p --percent             Minimal overlap percent to merge tracscript (default: 0)
+> 
 > ​        -h --help                   Print this help information
 
 The function of this script is to merge different transcripts of the same gene (or the same locus if the -l option specified). The merging criterion is: for each site of a gene, if in any transcript the site is located in exon, the site is treated as exonic site in the merged result, otherwise treated as intronic site.
@@ -180,7 +196,7 @@ A diagram to intuitively illustrate the merging:
 
 ![Merging_Illustration](https://github.com/zhangsjsky/CSTK/blob/master/Merging_Illustration.jpeg)
 
-                                         From C.
+&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;From C.
 
 In the figure, the first and second lines are the two transcripts of the same gene, the third line is the result after merging.
 
@@ -208,21 +224,37 @@ gpeFeature.pl -h
 ```
 
 > Usage: perl gpeFeature.pl OPTION INPUT.gpe >OUTPUT.bed
+> 
 > ​        If INPUT.gpe isn't specified, input from STDIN
+> 
 > Example: perl gpeFeature.pl -b -g hg19.size --upstream 1000 hg19.refGene.gpe >hg19.refGene.bed
+> 
 > Option:
+> 
 > ​        -b --bin                           With bin column
+> 
 > ​        -i --intron                        Fetch introns in each transcript
+> 
 > ​        -e --exon                         Fetch exons in each transcript
+> 
 > ​        -c --cds                            Fetch CDS in each transcript
+> 
 > ​        -u --utr                            Fetch UTRs in each transcript, 5'UTR then 3'UTR (or 3' first)
+> 
 > ​        -p --prime            INT     5 for 5'UTR, 3 for 3'UTR(force -u)
+> 
 > ​             --complete                 Only fetch UTR for completed transcripts
+> 
 > ​              --upstream      INT    Fetch upstream INT intergenic regions(force -g)
+> 
 > ​             --downstream INT     Fetch downstream INT intergenice regions(force -g)
+> 
 > ​        -g  --chrSize           FILE   Tab-separated file with two columns: chr name and its length
+> 
 > ​        -s   --single                       Bundle all features into single line for each transcript
+> 
 > ​              --addIndex                 Add exon/intron/CDS/UTR index as suffix of name in the 4th column
+> 
 > ​        -h  --help                          Print this help information
 
 This script is used to extract specific feature from the gpe file and output in bed format.

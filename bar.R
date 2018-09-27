@@ -99,13 +99,13 @@ Option:
 
     -xPer                   Show X label in percentage
     -yPer                   Show Y label in percentage
-    -xComma                 Show X label number with comma seperator
-    -yComma                 Show Y label number with comma seperator
+    -xComma                 Show X label number with comma separator
+    -yComma                 Show Y label number with comma separator
     -axisRatio      DOU     The fixed aspect ratio between y and x units
 
-    -annoTxt        STRs    The comma-seperated texts to be annotated
-    -annoTxtX       INTs    The comma-seperated X positions of text
-    -annoTxtY       INTs    The comma-seperated Y positions of text
+    -annoTxt        STRs    The comma-separated texts to be annotated
+    -annoTxtX       INTs    The comma-separated X positions of text
+    -annoTxtY       INTs    The comma-separated Y positions of text
     -annoTxtS       DOU     The annotated text size[5]
 Skill:
     Legend title of alpha, color, etc can be set as the same to merge their guides

@@ -18,8 +18,8 @@ print <<HELP;
 Usage: perl $scriptName coverageBedOutput.tsv >OUTPUT.tsv
     If coverageBedOutput.tsv isn't specified, input from STDIN
 Option:
-    -b  -bedFormat  INT Bed format ([$bedFormat], 6)
-    -h  --help          Print this help information
+    -b  --bedFormat  INT Bed format ([$bedFormat], 6)
+    -h  --help           Print this help information
 HELP
 }
 

@@ -15,10 +15,11 @@ use pm::samParser;
 my ($bedFile);
 my ($libType, $slop, $minRead) = ('fr-unstranded', 4, 2);
 GetOptions(
-            'b|bed=s'       => \$bedFile,
-            's|slop=i'      => \$slop,
-            'r|minRead=i'   => \$minRead,
-            'h|help'        => sub{usage()}
+            'b|bed=s'           => \$bedFile,
+            'l|libraryType=s'   => \$libType,
+            's|slop=i'          => \$slop,
+            'r|minRead=i'       => \$minRead,
+            'h|help'            => sub{usage()}
         ) || usage();
 
 open BED, "$bedFile" or die "Can't open $bedFile: $!";
@@ -141,14 +142,14 @@ print <<HELP;
 Usage: perl $scriptName INPUT.bam >OUTPUT.bed6+
     If INPUT.bam isn't specified, input from STDIN
 Option:
-    -b --bed        FILE    Gene models in bed12 format
-    -l|libraryType  STR     The library type, it can be
-                                fr-unstranded: for Standard Illumina (default)
-                                fr-firststrand: for dUTP, NSR, NNSR
-                                fr-secondstrand: for Ligation, Standard SOLiD and Illumina Directional Protocol
-    -s --slop       INT     Maximal slope length for a read to be considered as exonic read[4]
-    -r --minRead    INT     Minimal supporting reads count for an exclusion junction[2]
-    -h --help               Print this help information
+    -b --bed          FILE    Gene models in bed12 format
+    -l|--libraryType  STR     The library type, it can be
+                                  fr-unstranded: for Standard Illumina (default)
+                                  fr-firststrand: for dUTP, NSR, NNSR
+                                  fr-secondstrand: for Ligation, Standard SOLiD and Illumina Directional Protocol
+    -s --slop         INT     Maximal slope length for a read to be considered as exonic read[4]
+    -r --minRead      INT     Minimal supporting reads count for an exclusion junction[2]
+    -h --help                 Print this help information
 Output:
     The 4th column is the transcript name and the exon rank (in transcriptional direction) speparated by a dot.
     The 5th column in OUTPUT.bed6+ is the PSI normalized into 0-1000.

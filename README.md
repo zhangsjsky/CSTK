@@ -177,21 +177,21 @@ gpeMerge.pl -h
 ```
 
 > Usage: perl gpeMerge.pl input.gpe >output.gpe
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;If input.gpe not specified, input from STDIN
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;Output to STDOUT
-> 
-> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Have bin column
-> 
+>
+> &ensp;&ensp;&ensp;&ensp;-b --bin&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;With bin column
+>
 > &ensp;&ensp;&ensp;&ensp;-l --locus&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Merge with locus (default: merge gene)
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-t --longTranscript&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Overlap is against long transcript (default against short transcript)
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-n --name&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Set the "gene name" column as "transcript name(s)" when the corresponding gene name unavailable
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-p --percent&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;DOU&ensp;&ensp;Minimal overlap percent to merge transcript (default: 0)
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 The function of this script is to merge different transcripts of the same gene (or the same locus if the -l option specified). The merging criterion is: for each site of a gene, if in any transcript the site is located in exon, the site is treated as exonic site in the merged result, otherwise treated as intronic site.

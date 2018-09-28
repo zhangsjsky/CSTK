@@ -23,7 +23,7 @@ Option:
     -p --prime      INT     5 for 5'UTR, 3 for 3'UTR(force -u)
        --complete           Only fetch UTR for completed transcripts
        --upstream   INT     Fetch upstream INT intergenic regions(force -g)
-       --downstream INT     Fetch downstream INT intergenice regions(force -g)
+       --downstream INT     Fetch downstream INT intergenic regions(force -g)
     -g --chrSize    FILE    Tab-separated file with two columns: chr name and its length
     -s --single             Bundle all features into single line for each transcript
        --addIndex           Add exon/intron/CDS/UTR index as suffix of name in the 4th column

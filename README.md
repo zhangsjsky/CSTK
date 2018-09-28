@@ -8,11 +8,11 @@
     V. Get Help
 
 # I. Introduction
-C & S's ToolKit (CSTK) is a package composed of perl, R, python and shell scripts. Using the specific script in the package or combination of scripts in the package as pipeline, may meet the general requirement of bioinfomatics analysis and complete miscellaneous tasks. Functions of CSTK pose but not limited in:
+C & S's Toolkit (CSTK) is a package composed of perl, R, python and shell scripts. Using the specific script in the package or combination of scripts in the package as pipeline, may meet the general requirement of bioinformatics analysis and complete miscellaneous tasks. The function modules of CSTK include but not limited in:
 
 A. File format converting
 
-B. Processing of standard file format
+B. Processing of standard format file
 
 C. Table manipulation
 
@@ -22,9 +22,9 @@ E. Survival analysis
 
 F. Data visualization
 
-G. Parser of third-party tool result
+G. Parsing of third-party tool result
 
-H. Gene expression quantification
+H. Gene/region expression quantification
 
 I. Alternative splicing identification and quantification
 
@@ -41,21 +41,21 @@ CSTK mainly requires the following software/packages:
 |Python|=2.7|The Python language program.|
 |SAMTools|>=1.5|The toolkit to manipulate BAM files.|
 
-The given version is just to suggest you to use this version, but not to prohibit you from using older version, although we haven’t tested the older ones. More required software/packages are script-specific. If specific script in CSTK requires specific software/packages, please install it/them.
+The given version is just to suggest you to use this version, but not to prohibit you from using older version, although we haven’t tested the older ones. More required software/packages are script-specific. If specific script in CSTK requires specific software/packages, please install it/them according to the error information.
 
 # III. Download and Install
 
 Please download the CSTK from the release page or clone it with git.
 
-It's extremely easy to install CSTK, because all the source codes are written with script languages and no compilation needed. After installing the software/packages required in the "Prerequisites" section, CSTK is ready to use.
+It's extremely easy to install CSTK, because all the source codes are written with script languages and no compilation needed. After installing the software/packages required in the "Prerequisites" section, CSTK is ready to be used.
 
-Before using CSTK, firstly add the path of CSTK into the environment variable $PATH, in order to use scripts in CSTK with command directly. Assuming CSTK is decompressed and put at `/home/<yourUserName/bin>/CSTK`, run the following command:
+Before using CSTK, firstly add the path of CSTK into the environment variable $PATH, in order to use scripts in CSTK at the command line directly. Assuming CSTK is decompressed into `/home/<yourUserName/bin>/CSTK`, run the following command:
 
 ``` bash
 PATH=/home/<yourUserName>/bin/CSTK:$PATH
 ```
 
-You can add the command into your configuration file of environment (In general, it's `/home/<yourUserName>/.bashrc`), in order to use CSTK immediately after you login every time:
+You can add the command into your configuration file of environment (in general, it's `/home/<yourUserName>/.bashrc`), so that the CSTK is available to be used after you login every time:
 
 ``` bash
 cat <EOF >>/home/<yourUserName>/.bashrc
@@ -69,15 +69,15 @@ EOF
 
 The following rules are commonly applied in CSTK:
 
-A) For script with only one input file, the input is fetched from STDIN (Standard Input), except that the input file is specified with argument; For script with only one output file, the output is printed to STDOUT (Standard Output), meanwhile the STDERR (Standard Error) may be used for log output; For script with 2 output files, the output may be printed to STDOUT and STDERR, respectively, and also may be printed to STDOUT and file specified with option parameter, respectively. Using STDOUT and STDERR preferentially to option is convenient to pipe the analysis steps into pipeline. Pipeline can also speed up the analysis, meanwhile avoid the immediate files reading and writing hard disk.
+A) For script with only one input file, the input is passed in from STDIN (Standard Input), except that the input file is specified with argument; For script with only one output file, the output is printed to STDOUT (Standard Output), meanwhile the STDERR (Standard Error) may be used for log output; For script with 2 output files, the output may be printed to STDOUT and STDERR, respectively, or may be printed to STDOUT and the file specified with option parameter, respectively. Using STDOUT and STDERR preferentially to option is convenient to pipe the analysis procedures into a pipeline. Pipeline can also speed up the analysis, meanwhile avoid the immediate files reading and writing hard disk.
 
-B) Help information of almost all scripts can be viewed with -h, -help or --help options.
+B) Help information of almost all the scripts can be viewed with -h, -help or --help options.
 
-C) For options with value, option and value of Perl and Shell scripts is separated by a space character (*e.g.* -option value), while that of R is separated by an equal mark (*e.g*. -option=value).
+C) For option with value, option and value of Perl and Shell scripts are separated by a space character (*e.g.* `-option value`), while those of R are separated by an equal mark (*e.g*. `-option=value`).
 
 ## 4.2 Example
 
-Only one or two scripts in each function of CSTK are illustrated in these examples, illustration for more scripts will be appended according to the feedback of our users.
+Only one or two scripts in each function module of CSTK are illustrated in following examples, illustration for more scripts will be appended according to users' feedbacks.
 
 ### 4.2.1 File Format Converting
 
@@ -88,32 +88,36 @@ fqConverter.pl -h
 ```
 
 > Usage: perl fqConverter.pl input.fq >output.fq
-> 
-> &ensp;&ensp;&ensp;&ensp;If INPUT isn't specified, input from STDIN
-> 
+>
+> &ensp;&ensp;&ensp;&ensp;If input.fq isn't specified, input from STDIN
+>
+> &ensp;&ensp;&ensp;&ensp;If output.fq isn't specified, output to STDOUT
+>
+> Option:
+>
 > &ensp;&ensp;&ensp;&ensp;-s --source&ensp;&ensp;STR&ensp;&ensp;The quality format of your source fastq file ([fastq-illumina], fastq-solexa, fastq)
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-t --target&ensp;&ensp;&ensp;STR&ensp;&ensp;The quality format of your target fastq file (fastq-illumina, fastq-solexa, [fastq])
-> 
+>
 > &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;This help information screen
 
-Since Fastq is the common file format for bioinformatics, the content of input file is not illustrated here. For details of Fastq format, please visit [wiki](https://en.wikipedia.org/wiki/FASTQ_format).
+Since Fastq is the common format for bioinformatics, the content of input file is not illustrated here. For details of Fastq format, please visit [wiki](https://en.wikipedia.org/wiki/FASTQ_format).
 
 Running example:
 
 ``` bash
-zcat myReads.fq.gz | fqConverter.pl >myReads.sanger.fq
+zcat myReads.illumina.fq.gz | fqConverter.pl >myReads.sanger.fq
 ```
 
 The command converts the fastq in illumina format (default of -s option) to the famous sanger format (default of -t option).
 
-Pipeline is applied in the command to illustrated the advantage of piping the CSTK. You can also further improved it as:
+Pipeline is applied in the command to illustrate the advantage of piping the CSTK. You can also further improve it as:
 
 ``` bash
-zcat myReads.fq.gz | fqConverter.pl | gzip -c >myReads.sanger.fq.gz
+zcat myReads.illumina.fq.gz | fqConverter.pl | gzip -c >myReads.sanger.fq.gz
 ```
 
-In this way, the output fastq is stored as compressed gz file. In this analysis procedures, the CSTK script act only as the adapter in the pipeline, that is to fetch input from the output of the previous step and print output to the next step as its input.
+In this way, the output fastq is stored as compressed gz file. In these analysis procedures, the CSTK script act only as an adapter in the pipeline, that is to pass in the input from the output of the previous procedure and print the output to the next procedure as its input.
 
 - gpe2bed.pl
 
@@ -150,7 +154,7 @@ Assuming there is an input file (example.gpe) with the following contents:
 |147|NM_001308237|chr1|-|78028100|78149112|78031324|78105156|14|78028100,78031765,78034016,78041752,78044458,78045211,78046682,78047460,78047663,78050201,78105133,78107068,78107206,78148946,|78031469,78031866,78034151,78041905,78044554,78045313,78046754,78047576,78047811,78050340,78105287,78107131,78107340,78149112,|0|ZZZ3|cmpl|cmpl|2,0,0,0,0,0,0,1,0,2,0,-1,-1,-1,|
 |147|NM_015534|chr1|-|78028100|78148343|78031324|78099039|15|78028100,78031765,78034016,78041752,78044458,78045211,78046682,78047460,78047663,78050201,78097534,78105133,78107068,78107206,78148269,|78031469,78031866,78034151,78041905,78044554,78045313,78046754,78047576,78047811,78050340,78099090,78105287,78107131,78107340,78148343,|0|ZZZ3|cmpl|cmpl|2,0,0,0,0,0,0,1,0,2,0,-1,-1,-1,-1,|
 
-As shown, there is a bin column (the first column) in the gpe file, so the -b option should be specified. For the description of gpe file, please visit UCSC, http://genome.ucsc.edu/FAQ/FAQformat.html#format9.
+As shown, there is a bin column (the first column) in the gpe file, so the -b option should be specified. For the description of gpe file, please visit UCSC: http://genome.ucsc.edu/FAQ/FAQformat.html#format9.
 
 Run the script:
 
@@ -166,9 +170,9 @@ The content of the output bed file:
 | chr1| 78028100 | 78149112 | NM_001308237 | 0| -| 78031324 | 78105156 | 0,0,0 | 14 | 3369,101,135,153,96,102,72,116,148,139,154,63,134,166| 0,3665,5916,13652,16358,17111,18582,19360,19563,22101,77033,78968,79106,120846 |
 | chr1| 78028100 | 78148343 | NM_015534| 0| -| 78031324 | 78099039 | 0,0,0 | 15 | 3369,101,135,153,96,102,72,116,148,139,1556,154,63,134,74| 0,3665,5916,13652,16358,17111,18582,19360,19563,22101,69434,77033,78968,79106,120169 |
 
-The -t is 12 in default, so the output bed file is bed12 format. You can also try the -g or -p option to modify or add columns of output.
+The -t is 12 in default, so the output bed file is bed12 format in default. You can also try the -g or -p option to modify or add columns in output.
 
-### 4.2.2 Processing of Standard File Format
+### 4.2.2 Processing of Standard Format File
 
 - gpeMerge.pl
 
@@ -194,7 +198,7 @@ gpeMerge.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
-The function of this script is to merge different transcripts of the same gene (or the same locus if the -l option specified). The merging criterion is: for each site of a gene, if in any transcript the site is located in exon, the site is treated as exonic site in the merged result, otherwise treated as intronic site.
+This script can merge different transcripts of the same gene (or the same locus if the -l option specified). The merging criterion is: for each site of a gene, if in any transcript the site is located in exon, the site is treated as exonic site in the merged result, otherwise treated as intronic site.
 
 A diagram to intuitively illustrate the merging:
 
@@ -206,7 +210,7 @@ A diagram to intuitively illustrate the merging:
 
 
 
-In the figure, the first and second lines are the two transcripts of the same gene, the third line is the result after merging.
+In the figure, the top and middle lines are the two transcripts of the same gene, the bottom line is the result after merging.
 
 Use the example.gpe file in the previous section as input to run this script:
 
@@ -253,7 +257,7 @@ gpeFeature.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--upstream&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Fetch upstream INT intergenic regions(force -g)
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--downstream&ensp;&ensp;INT&ensp;&ensp;Fetch downstream INT intergenice regions(force -g)
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;--downstream&ensp;&ensp;INT&ensp;&ensp;Fetch downstream INT intergenic regions(force -g)
 >
 > &ensp;&ensp;&ensp;&ensp;-g  --chrSize&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;FILE&ensp;&ensp;Tab-separated file with two columns: chr name and its length
 >
@@ -277,7 +281,7 @@ gpeFeature.pl -b example.gpe -e >exon.bed6+
 | chr17 | 3912176 | 3912248 | NM_015113 | 0| -| NM_015113 | 72 | ZZEF1 |
 | chr17 | 3912897 | 3913051 | NM_015113 | 0| -| NM_015113 | 154| ZZEF1 |
 
-More records of the output are omitted. The result is in bed6+ format with each line represent an exon. The last two columns present the exon length and gene name.
+More records of the output are omitted. The result is in bed6+ format with each line representing an exon. The last two columns present the exon length and gene name.
 
 ### 4.2.3 Table Manipulation
 
@@ -325,9 +329,9 @@ tsvFilter.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
-This script is often used in table manipulation. It's function is to filter the target table according to one column or some columns (i.g. the target columns) with one or some columns (i.g. the source column) of another table (i.g. source table). The mode it's based is whether target columns include (or exclude) the source columns.
+This script is often used in table manipulation. It's function is to filter a table (*i.g.* target table) according to one column or some columns (*i.g.* the target columns) with one or some columns (*i.g.* the source column) of another table (*i.g.* source table). The mode on it's based is whether target columns include (or exclude) the source columns.
 
-Assuming the first column of the source table (source.tsv) is gene name, the second column is up- or down- regulation mark. It's content is:
+Assuming the first column of the source table (source.tsv) is gene name, the second column is up- or down- regulation mark:
 
 |       |      |
 | ----- | ---- |
@@ -335,7 +339,7 @@ Assuming the first column of the source table (source.tsv) is gene name, the sec
 | Gene2 | Down |
 | Gene3 | Up   |
 
-The first column of the target table (target.tsv) is gene name, the second column is up- or down- regulation fold-change. It's content is:
+The first column of the target table (target.tsv) is gene name, the second column is up- or down- regulation fold-change:
 
 |       |      |
 | ----- | ---- |
@@ -367,7 +371,7 @@ tsvJoin.sh
 >
 > Note: input2.tsv can be omitted or be a "-" to input the data from STDIN.
 >
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;when input1.tsv is a "-" (i.e. from STDIN), input2.tsv must be specified.
+> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;when input1.tsv is a "-" (*i.e.* from STDIN), input2.tsv must be specified.
 >
 > Options:
 >
@@ -383,14 +387,12 @@ tsvJoin.sh
 >
 > -o|outputDelimiter&ensp;&ensp;STR&ensp;&ensp;The delimiter of the output[\t]
 >
-> -a|unpairedFile&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Also print unpairable lines from file INT (1, 2)
->
->
+> -a|unpairedFile&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Also print unpairable lines from file INT (1, 2)<br>
 >
 >
 > Please specify at least one file
 
-This script is also often used in table manipulation. It's function is to join two table according to whether the values of one column or some columns are the same. Different from the join command built in Linux, this script can use the tab character as separated character.
+This script is also often used in table manipulation. It's function is to join two tables according to whether the values of one or some columns are the same. Different from the join command built in Linux, this script can use the tab character as separated character.
 
 Take the previous source.tsv and target.tsv as examples, join them according to gene name:
 
@@ -406,9 +408,9 @@ The output join.tsv is:
 | Gene2 | Down | 10   |
 | Gene3 | Up   | 2    |
 
-In the command, '2>/dev/null' means discarding the STDERR (for output running information). Because the columns used to joining in the two input table are both the first column, -1 and -2 options are specified as 1 in default.
+In the command, '2>/dev/null' means discarding the STDERR (for output running information). Because the columns used to join in the two input table are both the first column, -1 and -2 options are specified as 1 in default.
 
-In the above output, the column used to join (i.g. the gene name column) is set as the first column and is followed by the other columns in the first and the second files, except for the column used to join.
+In the above output, the column used to do joining (*i.g.* the gene name column) is set as the first column and is followed by the other columns in the first and the second files, except for the column used to do joining.
 
 ### 4.2.4 Statistical Testing
 
@@ -426,7 +428,15 @@ testT.R -h
 > 
 > &ensp;&ensp;&ensp;&ensp;-h&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Show help
 
-This script is used to conduct T-test testing. '<input.lst|<input1.lst input2.lst|input1.lst input2.lst' means there are a few input manners: A) Input one file from STDIN; B) Input from STDIN and option file, respectively; C) Input from two option files, respectively. The commonly used manner is the third one:
+This script is used to conduct T-test testing. '<input.lst|<input1.lst input2.lst|input1.lst input2.lst' means there are a few input manners:
+
+A) Input one file from STDIN;
+
+B) Input from STDIN and file (specified by an argument), respectively;
+
+C) Input from two files (specified by two arguments), respectively.
+
+The commonly used manner is the last one:
 
 Assuming the content of the first file (value1.lst) is:
 
@@ -610,7 +620,7 @@ In the command, awk is used to process the input before passing the data to bar.
 | 5| 5| female |
 | 6| 10 | female |
 
-The extra patient ID information is added as the first column and will be presented at X axis. The second column is survival time and will be presented at Y axis. The third column is gender and will be used to fill bar with different color. If the third column isn't presented, the bars are filled in black in default.
+The extra patient ID information is added as the first column and will be presented at X axis. The second column is survival time and will be presented at Y axis. The third column is gender and will be used to fill bar with different color. If the third column isn't presented, all the bars are filled in black in default.
 
 In the parameters of bar.R, -fillV=V3 tells it to use the third column (column name: V3) to color bars. Don't specify this option if no third column. -x and -y specify the label of X and Y axis, respectively. -fillT specify the title of the fill-legend.
 
@@ -658,7 +668,7 @@ hist.R -p=hist.pdf -x=Time -y='Patient Count' <survival.tsv
 
 Only one column of values is needed to draw a histogram, so feeds survival.tsv as input then the first column will be used default to draw histogram.
 
-### 4.2.7 Parser of Third-party Tool Result
+### 4.2.7 Parsing of Third-party Tool Result
 
 - coverageBedParser.pl
 
@@ -703,7 +713,7 @@ This script is used to parse the result (in general, the fastqc_data.txt) of Fas
 fastqcParser.pl fastqc_data.txt >fastqcDataParsed.tsv
 ```
 
-### 4.2.8 Gene Expression Quantification
+### 4.2.8 Gene/Region Expression Quantification
 
 geneRPKM.pl
 
@@ -795,7 +805,7 @@ Similarly, if the memory isn't enough, use regionRPKM_mem.pl as alternative.
 
 ### 4.2.9 Alternative Splicing Identification and Quantification
 
-On identification and quantification of SE (Skipping Exon) event is implemented in current version.
+Only identification and quantification of SE (Skipping Exon) event are implemented in current version.
 
 - psiSE.pl
 

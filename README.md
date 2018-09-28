@@ -387,7 +387,9 @@ tsvJoin.sh
 >
 > -o|outputDelimiter&ensp;&ensp;STR&ensp;&ensp;The delimiter of the output[\t]
 >
-> -a|unpairedFile&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Also print unpairable lines from file INT (1, 2)<br>
+> -a|unpairedFile&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;INT&ensp;&ensp;Also print unpairable lines from file INT (1, 2)
+>
+>  
 >
 >
 > Please specify at least one file

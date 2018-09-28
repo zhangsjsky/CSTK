@@ -17,7 +17,7 @@ sub usage{
     my $scriptName = basename $0;
 print <<HELP;
 Usage: perl $scriptName OPTION fastqc_data.txt >OUTPUT.tsv
-    If INPUT isn't specified, input from STDIN
+    If fastqc_data.txt isn't specified, input from STDIN
 Option:
 
     -h  --help                      Print this help information

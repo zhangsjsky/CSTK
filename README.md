@@ -438,9 +438,7 @@ B) Input from STDIN and file (specified by an argument), respectively;
 
 C) Input from two files (specified by two arguments), respectively.
 
-The commonly used manner is the last one:
-
-Assuming the content of the first file (value1.lst) is:
+The commonly used manner is the last one. Assuming the content of the first file (value1.lst) is:
 
 1
 
@@ -560,13 +558,13 @@ survival.R -h
 > 
 > &ensp;&ensp;&ensp;&ensp;10&ensp;&ensp;&ensp;&ensp;FALSE&ensp;female
 
-As the help information presents, creating an input file as the Example2 (survival.tsv). Feed it to the script as input and specify the output pdf file:
+As the help information presents, creating an input file as the Example2 (survival.tsv). Pass it to the script as input and specify the output pdf file:
 
 ``` bash
 survival.R -p=survival.pdf <survival.tsv >survival.log 2>survival.err
 ```
 
-Survival curve (i.g. Kaplan-Meier curve) and the log-rank p-value are stored in the pdf. Statistical measurements are stored in survival.log.
+Survival curve (*i.g.* Kaplan-Meier curve) and the log-rank p-value are stored in the pdf. Statistical measurements are stored in survival.log.
 
 ### 4.2.6 Data Visualization
 
@@ -624,7 +622,7 @@ In the command, awk is used to process the input before passing the data to bar.
 
 The extra patient ID information is added as the first column and will be presented at X axis. The second column is survival time and will be presented at Y axis. The third column is gender and will be used to fill bar with different color. If the third column isn't presented, all the bars are filled in black in default.
 
-In the parameters of bar.R, -fillV=V3 tells it to use the third column (column name: V3) to color bars. Don't specify this option if no third column. -x and -y specify the label of X and Y axis, respectively. -fillT specify the title of the fill-legend.
+In the parameters of bar.R, `-fillV=V3` tells it to use the third column (column name: V3) to color bars. Don't specify this option if no third column. -x and -y specify the label of X and Y axis, respectively. -fillT specify the title of the fill-legend.
 
 - hist.R
 
@@ -668,7 +666,7 @@ This script is used to draw histogram.
 hist.R -p=hist.pdf -x=Time -y='Patient Count' <survival.tsv
 ```
 
-Only one column of values is needed to draw a histogram, so feeds survival.tsv as input then the first column will be used default to draw histogram.
+Only one column of values is needed to draw a histogram, so pass in survival.tsv as input then the first column will be used default to draw histogram.
 
 ### 4.2.7 Parsing of Third-party Tool Result
 
@@ -689,7 +687,7 @@ coverageBedParser.pl -h
 > &ensp;&ensp;&ensp;&ensp;-h  --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
 
-This script is used to parse the output result of 'bedtools coverage', calculate the mean depth and covered fraction of each region.
+This script is used to parse the output result of '`bedtools coverage`', calculate the mean depth and covered fraction of each region.
 
 ``` bash
 coverageBedParser.pl coverage.bed >coverageParsed.bed
@@ -703,7 +701,7 @@ fastqcParser.pl -h
 
 > Usage: perl fastqcParser.pl OPTION fastqc_data.txt >OUTPUT.tsv
 > 
-> &ensp;&ensp;&ensp;&ensp;If INPUT isn't specified, input from STDIN
+> &ensp;&ensp;&ensp;&ensp;If fastqc_data.txt isn't specified, input from STDIN
 > 
 > Options:
 > 
@@ -717,7 +715,8 @@ fastqcParser.pl fastqc_data.txt >fastqcDataParsed.tsv
 
 ### 4.2.8 Gene/Region Expression Quantification
 
-geneRPKM.pl
+- geneRPKM.pl
+
 
 ``` bash
 geneRPKM.pl -h
@@ -753,15 +752,15 @@ geneRPKM.pl -h
 > 
 > &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
-As the help information describes, this script chooses the longest transcript of each gene as the reference to quantify the expression of each gene with RPKM. The output result is stored in bed6+. An running example:
+As the help information describes, this script chooses the longest transcript of each gene as the reference to quantify the expression of each gene in RPKM. The output result is stored in bed6+. A running example:
 
 ``` bash
 geneRPKM.pl -g refGene.gpe -b -s 4 final.bam >RPKM.bed6+ 2>geneRPKM.log
 ```
 
-In the command, -s option specifies the length in which reads can extend from exon into intron. This option is devised to handle the situation that reads may be incapable of spanning an intron to be aligned to the adjacent exon with a few base-pair.
+In the command, -s option specifies the length in which reads can extend from exon into intron. This option is devised to handle the situation that reads may be incapable of spanning an intron to be aligned to adjacent exon with a few base-pair.
 
-This script may consume too much memory (depend on the size of the input bam file). If the memory isn't enough on the machine, the script geneRPKM_mem.pl, which consumes little memory but runs slowly, may be a alternative choice.
+This script may consume too much memory (depend on the size of the input bam file). If the memory isn't enough on the machine, the script geneRPKM_mem.pl, which consumes little memory but runs slower, may be an alternative choice.
 
 - regionRPKM.pl
 
@@ -797,7 +796,7 @@ regionRPKM.pl -h
 > 
 > &ensp;&ensp;&ensp;&ensp;-h --help&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;Print this help information
 
-This script calculates the RPKM of specific regions (specified by --bedFile option). An running example:
+This script calculates the RPKM of specific regions (specified by --bedFile option). A running example:
 
 ``` bash
 regionRPKM.pl --bedFile exon.bed final.bam >RPKM.bed 2>regionRPKM.log
@@ -857,7 +856,7 @@ psiSE.pl -h
 >
 > &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;exclusion read density
 
-This script is used to identify and quantify the PSI of SE event from the alignments. An using example:
+This script is used to identify SE events and quantify the PSI of them from the alignments. An using example:
 
 ``` bash
 psiSE.pl final.bam >SE.bed6+

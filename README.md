@@ -53,9 +53,10 @@ Before using CSTK, firstly add the path of CSTK into the environment variable $P
 
 ``` bash
 PATH=/home/<yourUserName>/bin/CSTK:$PATH
+chmod u+x /home/<yourUserName>/bin/CSTK/*.{pl,R,py,sh}
 ```
 
-You can add the command into your configuration file of environment (in general, it's `/home/<yourUserName>/.bashrc`), so that the CSTK is available to be used after you login every time:
+You can add the first command line into your configuration file of environment (in general, it's `/home/<yourUserName>/.bashrc`), so that the CSTK is available to be used after you login every time:
 
 ``` bash
 cat <EOF >>/home/<yourUserName>/.bashrc

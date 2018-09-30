@@ -14,7 +14,7 @@ usage(){
 Usage: $(basename $0) OPTIONS [-1 field1] [-2 fields2] input1.tsv [input2.tsv]
 Note: input2.tsv can be omitted or be a "-" to input the data from STDIN.
       when input1.tsv is a "-" (i.e. from STDIN), input2.tsv must be specified.
-Options:
+Option:
     -1|field1           STR  The field in input1.tsv used when joining[$field1]
                              Refer to the -1 option of linux join command
     -2 field2           STR  The field in input2.tsv used when joining[$field2]

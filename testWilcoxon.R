@@ -10,7 +10,7 @@ usage = function(){
     sink(stderr())
     cat(paste0("Usage: ", scriptName))
     cat(" -option=value <input.lst|input.lst|input1.lst input2.lst >pValue
-Options
+Option:
     -a|alt  STR  The alternative hypothesis ([two.sided], greater, less)
                  You can specify just the initial letter
     -m|mu   DOU  A parameter used to form the null hypothesis for one-sample test[0]

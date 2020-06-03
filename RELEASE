@@ -1,6 +1,6 @@
-# Version to be release
+# Version 1.1.0
 ## 1. Add new tools
-Add bam-readcount2depth.pl,maftools.R, enhancedVolcano.R, complexHeatmap.R and upSet.R
+Add bam-readcount2depth.pl, maftools.R, enhancedVolcano.R, complexHeatmap.R, upSet.R, ABSOLUTE.R, freec2segment.pl, SomaticSignatures.R, C-index.R and deconstructSigs.R
 ## 2. Modify existing tools
 Add control of panel for tile.R
 Add scale_fill_gradient2 for tile.R

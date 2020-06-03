@@ -350,13 +350,19 @@ for(i in 1:length(args)){
 }
 
 if(exists('noGgplot')){
-  myCmd = 'boxplot(values~ind, data = data, outline = outlier'
-  if(exists('x1') && exists('x2')) myCmd = paste0(myCmd, ', xlim = c(x1, x2)')
-  if(exists('main')) myCmd = paste0(myCmd, ', main = main')
-  if(exists('xLab')) myCmd = paste0(myCmd, ', xlab = xLab')
-  if(exists('yLab')) myCmd = paste0(myCmd, ', ylab = yLab')
-  myCmd = paste0(myCmd, ')')
-  eval(parse(text = myCmd))
+    myCmd = 'boxplot(values~ind, data = data, outline = outlier'
+    if(exists('x1') && exists('x2')) myCmd = paste0(myCmd, ', xlim = c(x1, x2)')
+    if(exists('main')) myCmd = paste0(myCmd, ', main = main')
+    if(exists('xLab')) myCmd = paste0(myCmd, ', xlab = xLab')
+    if(exists('yLab')) myCmd = paste0(myCmd, ', ylab = yLab')
+    logStr = ''
+    if(exists('yLog')){
+        logStr = paste0(logStr, 'y')
+        data = data[c(data$values!=0),]
+    }
+    if(logStr != '') myCmd = paste0(myCmd, ', log = logStr')
+    myCmd = paste0(myCmd, ')')
+    eval(parse(text = myCmd))
 }else{
     library(ggplot2)
     p = ggplot(data, aes(x = factor(ind), y = values))

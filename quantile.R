@@ -108,7 +108,7 @@ if(length(args) >= 1){
         arg = args[i]
         
         tmp = parseArg(arg, 'q(uantile)?', 'q'); if(!is.null(tmp)) quantiles = strsplit(tmp, ',', fixed = T)[[1]]
-        if(arg = '-point') point = TRUE
+        if(arg == '-point') point = TRUE
         tmp = parseArg(arg, 'lEnd', 'lEnd'); if(!is.null(tmp)) lEnd = tmp
         tmp = parseArg(arg, 'lJoin', 'lJoin'); if(!is.null(tmp)) lJoin = tmp
         tmp = parseArg(arg, 'lMitre', 'lMitre'); if(!is.null(tmp)) lMitre = tmp

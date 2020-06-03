@@ -26,7 +26,8 @@ Option:
     -d|direction    1/-1    [1]: clockwise, -1: counter-clockwise
     -b|bullseye             Draw bullseye chart. Label of each bullseye should put in the first column
     -p|pos          STR     Position of bars on each bulleys([stack], fill, ...)
-    -nT|nText               Do not draw number text on each sector
+    -labelV         STR     The label column to draw on each sector[V1]
+    -nT|nText               Do not draw text on each sector
 
     -a|alpha        DOU     The alpha of sector body
     -alphaV         STR     The column name to apply alpha (V3, V4, ...)
@@ -43,6 +44,7 @@ Option:
     -colorD         STR     The direction of color legend (horizontal, vertical)
     -f|fill         STR     The color of sector body
     -fillC                  Continuous fill mapping
+    -scaleFillIdentity      Use the color identity to fill
     -l|low          STR     Low color of scale color bar[white]
     -high           STR     High color of scale color bar[red]
     -fillT          STR     The title of fill legend[Category]
@@ -94,8 +96,8 @@ showGuide = TRUE
 myPdf = 'figure.pdf'
 mainS = 20
 direction = 1
+labelV = 'V1'
 start = 0
-position = 'stack'
 low = 'white'
 high = 'red'
 
@@ -105,10 +107,11 @@ if(length(args) >= 1){
         tmp = parseArgAsNum(arg, 'start', 'start'); if(!is.null(tmp)) start = tmp
         tmp = parseArg(arg, 'd(irection)?', 'd'); if(!is.null(tmp)) direction = tmp
         tmp = parseArg(arg, 'pos(ition)?', 'pos'); if(!is.null(tmp)) position = tmp
+        tmp = parseArg(arg, 'labelV', 'labelV'); if(!is.null(tmp)) labelV = tmp
         if(arg == '-b' || arg == '-bullseye') bullseye = TRUE
         if(arg == '-nT' || arg == '-nText') noText = TRUE
         
-        tmp = parseArgAsNum(arg, 'a(lpha)?', 'a'); if(!is.null(tmp)) alpha = tmp
+        tmp = parseArgAsNum(arg, 'a(lpha)?', 'a'); if(!is.null(tmp)) myAlpha = tmp
         tmp = parseArg(arg, 'alphaV', 'alphaV'); if(!is.null(tmp)) alphaV = tmp
         tmp = parseArg(arg, 'alphaT', 'alphaT'); if(!is.null(tmp)) alphaT = tmp
         tmp = parseArg(arg, 'alphaTP', 'alphaTP'); if(!is.null(tmp)) alphaTP = tmp
@@ -123,6 +126,7 @@ if(length(args) >= 1){
         tmp = parseArg(arg, 'colorD', 'colorD'); if(!is.null(tmp)) colorD = tmp
         if(arg == '-fillC') fillC = TRUE
         tmp = parseArg(arg, 'f(ill)?', 'f'); if(!is.null(tmp)) fill = tmp
+        if(arg == '-scaleFillIdentity') scaleFillIdentity = TRUE
         tmp = parseArg(arg, 'fillT', 'fillT'); if(!is.null(tmp)) fillT = tmp
         tmp = parseArg(arg, 'fillTP', 'fillTP'); if(!is.null(tmp)) fillTP = tmp
         tmp = parseArg(arg, 'fillLP', 'fillLP'); if(!is.null(tmp)) fillLP = tmp
@@ -191,7 +195,8 @@ if(exists('noGgplot')){
         p = ggplot(data, aes(x = V1, y = V3, label = V3))
         fillV= 'V2'
     }else{
-        p = ggplot(data, aes(x = factor(1), y = V2, label = V2))
+        myCmd= paste0('p = ggplot(data, aes(x = factor(1), y = V2, label = ', labelV, '))')
+        eval(parse(text = myCmd))
         p = p + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank()) 
         fillV = 'V1'
     }
@@ -221,13 +226,14 @@ if(exists('noGgplot')){
     if(exists('fillC')){
         p = p + aes_string(fill = fillV) + scale_fill_continuous(name = fillT, low = low, high = high)
     }else{
-        myCmd = paste0('p = p + aes(fill = factor(', fillV, ')) + guides(fill = guide_legend(fillT')
+        myCmd = paste0('p = p + aes(fill = factor(', fillV, ', levels = unique(', fillV, '))) + guides(fill = guide_legend(fillT')
         if(exists('fillTP')) myCmd = paste0(myCmd, ', title.position = fillTP')
         if(exists('fillLP')) myCmd = paste0(myCmd, ', label.position = fillLP')
         if(exists('fillD')) myCmd = paste0(myCmd, ', direction = fillD')
         myCmd = paste0(myCmd, '))')
         eval(parse(text = myCmd))
     }
+    if(exists('scaleFillIdentity')) p = p + scale_fill_identity()
     if(exists('linetypeV')){
         myCmd = paste0('p = p + aes(linetype = factor(', linetypeV, '))'); eval(parse(text = myCmd))
         myCmd = 'p = p + guides(linetype = guide_legend(linetypeT'
@@ -256,15 +262,14 @@ if(exists('noGgplot')){
         eval(parse(text = myCmd))
     }
 
-    myCmd = paste0('p = p + geom_bar(stat = "identity", width = 1, show_guide = showGuide')
-    if(exists('alpha')) myCmd = paste0(myCmd, ', alpha = alpha')
+    myCmd = paste0('p = p + geom_bar(stat = "identity", width = 1, show.legend = showGuide')
+    if(exists('myAlpha')) myCmd = paste0(myCmd, ', alpha = myAlpha')
     if(exists('color')) myCmd = paste0(myCmd, ', color = color')
     if(exists('fill')) myCmd = paste0(myCmd, ', fill = fill')
     if(exists('size')) myCmd = paste0(myCmd, ', size = size')
-    if(exists('position')) myCmd = paste0(myCmd, ', position = position')
-    myCmd = paste0(myCmd, ')')
+    myCmd = paste0(myCmd, ', position = position_stack(reverse= TRUE))')
     eval(parse(text = myCmd))
-    
+
     if(exists('myFacet')){
         myCmd = paste0('p = p + ', myFacet, '(facetM')
         if(exists('facetScl')) myCmd = paste0(myCmd, ', scales = facetScl')
@@ -299,6 +304,5 @@ if(exists('noGgplot')){
     if(exists('main')) p = p + ggtitle(main)
     p = p + theme(plot.title = element_text(size = mainS))
     if(exists('anno')) p = p + annotate('text', x = 1:nrow(data), y = data[[2]], label = data[[2]])
-    
     p
 }

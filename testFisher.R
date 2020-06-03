@@ -44,4 +44,4 @@ fun = function(x){
 }
 
 pValues = t(apply(data, 1, fun))
-write.table(pValues, stdout(), row.names = F, col.names = F)
+write.table(pValues, stdout(), row.names = F, col.names = F, sep = "\t")

@@ -9,7 +9,7 @@ source(paste0(scriptDir, '/common.R'))
 
 usage = function(){
     cat(paste0("Usage: ", scriptName) )
-    cat(" -p=outputName.pdf <input.tsv >statistics.tsv
+    cat(" <input.tsv >statistics.tsv
 Option:
     -d|direction  STR   R: summarize all values in each row
                         C: summarize all values in each column

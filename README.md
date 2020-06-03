@@ -64,6 +64,15 @@ PATH=/home/<yourUserName>/CSTK:$PATH
 EOF
 ```
 
+Rather than downloading and installing manually, it's recommended to setup up by Docker (https://hub.docker.com/r/zhangsjsky/cstk) or Singularity (https://cloud.sylabs.io/library/_container/5ed705dfd0ff9c878fea7e50). In this way you don't needed to install the denpendencies.
+``` bash
+# For Docker
+docker pull zhangsjsky/cstk:latest
+# For Singularity
+singularity pull library://zhangsjsky/default/cstk
+EOF
+```
+
 # IV. Tutorial
 
 ## 4.1 Common Rules

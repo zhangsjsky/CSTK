@@ -10,9 +10,12 @@ usage = function(){
     sink(stderr())
     cat(paste0("Usage: ", scriptName))
     cat(" -option=value <input.lst|<input1.lst input2.lst|input1.lst input2.lst >pValue
+Note: When date are input only form STDIN, the data will be compare with -mu.
+      E.g.: run with '-mu=0 <input.lst'
 Option:
     -p|pair      Pair
     -a|alt  STR  The alternative hypothesis: [two.sided], greatr or less
+    -m|mu   DOU  A number indicating the true value of the mean
     -h           Show help
 ")
     sink()
@@ -40,6 +43,12 @@ if(length(args) >= 1){
             args[i] = NA
             next
         }
+        tmp = parseArgNum(arg, 'm(u)?', 'mu')
+        if(!is.null(tmp)){
+            mu = tmp
+            args[i] = NA
+            next
+        }
     }
 }
 args = args[!is.na(args)]
@@ -54,10 +63,15 @@ if(length(args) >= 2){
       values2 = read.delim(args[1], header = F)[[1]]
     }else{
       values1 = data[[1]]
-      values2 = data[[1]]
     }
 }
 
-pValue = t.test(values1, values2, paired = myPair, alternative = myAlt)$p.value
+if(length(args) == 0){
+    pValue = t.test(values1, mu=mu, paired = myPair, alternative = myAlt)$p.value
+}else{
+    if(length(values1) == 1) values1=rep(values1[1], 2)
+    if(length(values2) == 1) values2=rep(values2[1], 2)
+    pValue = t.test(values1, values2, paired = myPair, alternative = myAlt)$p.value
+}
 
 write.table(pValue, stdout(), row.names = F, col.names = F)

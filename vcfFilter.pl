@@ -10,10 +10,11 @@ use warnings;
 use strict;
 use Getopt::Long;
 use File::Basename;
+use List::Util;
 
 my ($fExclusions);
 my ($minDP, $infoKey, $maxValueOfKey, $minValueOfKey, $equalToValueOfKey, $valueList);
-my ($GT, $fMinDP, $fMinAltDepth, $fMaxAltDepth, $fMinFreq, $fMaxFreq, $minGQ, $minFR);
+my ($GT, $fMinDP, $fMinAltDepth, $fMaxAltDepth, $fMinFreq, $fMaxFreq, $minGQ, $maxFR);
 my $indexes = 1;
 sub usage{
     my $scriptName = basename $0;
@@ -43,7 +44,7 @@ Option:
         --fMaxFreq          DOU     The maximal alt allele frequency (according to FORMAT/FREQ, FORMAT/AF, FORMAT/RD, FORMAT/AD or FORMAT/DP4)
     -q  --minGQ             INT     The minima FORMAT/GQ for a record to be kept
     -i  --sampleIndex       INTs    The comma-separated index numbers (1-start) of samples to be applied with FORMAT-related filter[1]
-        --minFR             [0,1]   The min ratio of tumor freq/normal freq. Tumor and normal index are specified by --sampleIdex in order of tumor and normal
+        --maxFR             DOU     The max ratio of normal freq/tumor freq. Normal and tumor index are specified by --sampleIdex in order of normal and tumor
     -h  --help                      Print this help information
 HELP
 }
@@ -66,7 +67,7 @@ GetOptions(
             'fMaxFreq=s'            => \$fMaxFreq,
             'q|minGQ=i'             => \$minGQ,
             'i|sampleIndex=s'       => \$indexes,
-            'minFR=s'               => \$minFR,
+            'maxFR=s'               => \$maxFR,
             'h|help'                => sub{usage(); exit}
 ) || usage();
 
@@ -243,19 +244,19 @@ while(<IN>){
             }
         }
     }
-    if(defined $minFR){
+    if(defined $maxFR){
         my @keys = split ':', $fields[8];
         my @indexes = split ',', $indexes;
         
         my @values = split ':', $fields[8+$indexes[0]];
         my %FORMATs;
         $FORMATs{$keys[$_]} = $values[$_] for (0..$#keys);
-        my $tumorFreq = &getFreq(\%FORMATs);
+        my $normalFreq = &getFreq(\%FORMATs);
         
         @values = split ':', $fields[8+$indexes[1]];
         $FORMATs{$keys[$_]} = $values[$_] for (0..$#keys);
-        my $normalFreq = &getFreq(\%FORMATs);
-        if($normalFreq == 0 || $tumorFreq/$normalFreq >= $minFR){
+        my $tumorFreq = &getFreq(\%FORMATs);
+        if($normalFreq/$tumorFreq <= $maxFR){
             say;
             next;
         }
@@ -275,11 +276,12 @@ sub getFreq{
         }
     }elsif(defined $FORMATs{AF}){
         my @AFs = split ',', $FORMATs{AF};
-        if(@AFs == 1){
-            $freq = $AFs[0];
-        }else{
-            $freq = $AFs[1];
-        }
+        #if(@AFs == 1){
+        #    $freq = $AFs[0];
+        #}else{
+        #    $freq = $AFs[1];
+        #}
+        $freq = List::Util::sum(@AFs);
     }elsif(defined $FORMATs{AD}){
         my @ADs = split ',', $FORMATs{AD};
         my ($refDepth, $altDepth);

@@ -11,30 +11,31 @@ usage = function(){
     cat(" [-p=correlation.pdf] <input.tsv >correlation+p-value.tsv
 Option:
   Common:
-    -p|-pdf        FILE             The output figure in pdf
-    -w|-width      INT              The figure width
-    -mainS         DOU              The size of main title[16 for ggplot]
+    -p|pdf        FILE                      The output figure in pdf
+    -w|width      INT                       The figure width
+    -mainS        DOU                       The size of main title[16 for ggplot]
 
-    -m|-method     all/pearson      Which correlation coefficient to computed[all] 
-                   spearman/kendall
-
-    -xl|-xlog      INT              Transform the x axis to INT base log
-    -yl|-ylog      INT              Transform the y axis to INT base log
-    -x1            INT              The xlim start
-    -x2            INT              The xlim end
-    -y1            INT              The ylim start
-    -y2            INT              The ylim end
-    -x|-xlab       STR              The xlab
-    -y|-ylab       STR              The ylab
-    -xLblS         DOU              The X-axis label size[20 for ggplot]
-    -xTxtS         DOU              The X-axis text size[18 for ggplot]
-    -yLblS         DOU              The Y-axis label size[20 for ggplot]
-    -yTxtS         DOU              The Y-axis text size[18 for ggplot]
-
-    -a|alpha       DOU              The alpha of point body
-
-    -ng|-noGgplot                   Draw figure in the style of R base rather than ggplot 
-    -h                              Show help
+    -m|method     pearson/spearman/kendall  Which correlation coefficient to computed[all] 
+                   ps/all
+    -noDiagonal                             Don't draw the diagonal y=x
+    
+    -xl|xlog      INT                       Transform the x axis to INT base log
+    -yl|ylog      INT                       Transform the y axis to INT base log
+    -x1           INT                       The xlim start
+    -x2           INT                       The xlim end
+    -y1           INT                       The ylim start
+    -y2           INT                       The ylim end
+    -x|xlab       STR                       The xlab
+    -y|ylab       STR                       The ylab
+    -xLblS        DOU                       The X-axis label size[20 for ggplot]
+    -xTxtS        DOU                       The X-axis text size[18 for ggplot]
+    -yLblS        DOU                       The Y-axis label size[20 for ggplot]
+    -yTxtS        DOU                       The Y-axis text size[18 for ggplot]
+                                            
+    -a|alpha      DOU                       The alpha of point body
+                                            
+    -ng|-noGgplot                           Draw figure in the style of R base rather than ggplot 
+    -h                                      Show help
 ")
     q(save='no')
 }
@@ -54,7 +55,11 @@ if(length(args) >= 1){
         tmp = parseArg(arg, 'p(df)?', 'p'); if(!is.null(tmp)) myPdf = tmp
         tmp = parseArgNum(arg, 'w(idth)?', 'w'); if(!is.null(tmp)) width = tmp
         tmp = parseArgNum(arg, 'mainS', 'mainS'); if(!is.null(tmp)) mainS = tmp
+        
         tmp = parseArg(arg, 'm(ethod)?', 'm'); if(!is.null(tmp)) myMethod = tmp
+        
+        if(arg == '-noDiagonal') noDiagonal = TRUE
+        
         tmp = parseArgNum(arg, 'xl(og)?', 'xl'); if(!is.null(tmp)) xLog = tmp
         tmp = parseArgNum(arg, 'yl(og)?', 'yl'); if(!is.null(tmp)) yLog = tmp
         tmp = parseArgNum(arg, 'x1', 'x1'); if(!is.null(tmp)) x1 = tmp
@@ -80,6 +85,7 @@ cat('\npdf\t'); if(exists('myPdf')) cat(myPdf)
 cat('\nwidth\t'); if(exists('width')) cat(width)
 cat('\nmainS\t'); cat(mainS)
 cat('\nmethod\t'); cat(myMethod)
+cat('\nnoDiagonal\t'); if(exists('noDiagonal')) cat(noDiagonal)
 cat('\nxlog\t'); if(exists('xLog')) cat(xLog)
 cat('\nylog\t'); if(exists('yLog')) cat(yLog)
 cat('\nx1\t'); if(exists('x1')) cat(x1)
@@ -106,7 +112,7 @@ if(myMethod == 'pearson'){
     testRes = cor.test(V1, V2, method = myMethod)
     pearsonR = round(testRes$estimate[[1]], 2)
     pearsonP = testRes$p.value
-    main = paste0('PearsonR = ', pearsonR, ', p-value = ', pearsonP)
+    main = paste0('Pearson R = ', pearsonR, ', p-value = ', pearsonP)
     Rs = data.frame('Pearson', pearsonR, pearsonP)
 }
 
@@ -114,7 +120,7 @@ if(myMethod == 'spearman'){
     testRes = cor.test(V1 , V2 , method = myMethod)
     spearmanR = round(testRes$estimate[[1]], 2)
     spearmanP = testRes$p.value
-    main = paste0('SpearmanR = ', spearmanR, ', p-value = ', spearmanP)
+    main = paste0('Spearman R = ', spearmanR, ', p-value = ', spearmanP)
     Rs = data.frame('Spearman', spearmanR, spearmanP)
 }
 
@@ -122,10 +128,21 @@ if(myMethod == 'kendall'){
     testRes = cor.test(V1, V2, method = myMethod)
     kendallR = round(testRes$estimate[[1]], 2)
     kendallP = testRes$p.value
-    main = paste0('KendallR = ', kendallR, ', p-value = ', kendallP)
+    main = paste0('Kendall R = ', kendallR, ', p-value = ', kendallP)
     Rs = data.frame('Kendall', kendallR, kendallP)
 }
-
+if(myMethod == 'ps'){
+    testRes = cor.test(V1, V2, method = 'pearson')
+    pearsonR = round(testRes$estimate[[1]], 2)
+    pearsonP = testRes$p.value
+    testRes = cor.test(V1, V2, method = 'spearman')
+    spearmanR = round(testRes$estimate[[1]], 2)
+    spearmanP = testRes$p.value
+    main = paste0('Pearson R = ', pearsonR, ', p-value = ', pearsonP,  "\n",
+                  'Spearman R = ', spearmanR, ', p-value = ', spearmanP)
+    Rs = rbind(c('Pearson', pearsonR, pearsonP), 
+               c('Spearman', spearmanR, spearmanP))
+}
 if(myMethod == 'all'){
     testRes = cor.test(V1, V2, method = 'pearson')
     pearsonR = round(testRes$estimate[[1]], 2)
@@ -136,9 +153,9 @@ if(myMethod == 'all'){
     testRes = cor.test(V1, V2, method = 'kendall')
     kendallR = round(testRes$estimate[[1]], 2)
     kendallP = testRes$p.value
-    main = paste0('PearsonR = ', pearsonR, ', p-value = ', pearsonP,  "\n",
-                  'SpearmanR = ', spearmanR, ', p-value = ', spearmanP, "\n",
-                  'KendallR = ', kendallR, ', p-value = ', kendallP)
+    main = paste0('Pearson R = ', pearsonR, ', p-value = ', pearsonP,  "\n",
+                  'Spearman R = ', spearmanR, ', p-value = ', spearmanP, "\n",
+                  'Kendall R = ', kendallR, ', p-value = ', kendallP)
     Rs = rbind(c('Pearson', pearsonR, pearsonP), 
                c('Spearman', spearmanR, spearmanP), 
                c('Kendall', kendallR, kendallP))
@@ -174,7 +191,8 @@ if(exists('myPdf')){
     }else{
         library(ggplot2)
         p = ggplot(data, aes(V1, V2))
-        myCmd = 'p = p + geom_abline(intercept = 0, slope = 1, linetype = "longdash", size = 0.3) + geom_point(show.legend = showGuide'
+        if(!exists('noDiagonal')) p = p + geom_abline(intercept = 0, slope = 1, linetype = "longdash", size = 0.3)
+        myCmd = 'p = p + geom_point(show.legend = showGuide'
         if(exists('myAlpha')) myCmd = paste0(myCmd, ', alpha = myAlpha')
         myCmd = paste0(myCmd, ')')
         eval(parse(text = myCmd))

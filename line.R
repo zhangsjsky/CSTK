@@ -23,8 +23,11 @@ Option:
     -x2         INT     The xlim end
     -y1         INT     The ylim start
     -y2         INT     The ylim end
+    -xLblS      DOU     The X-axis label size[20 for ggplot]
+    -xTxtS      DOU     The X-axis text size[18 for ggplot]
     -xAngle     [0,360] The angle of tick labels[0]
     -ng|noGgplot        Draw figure in the style of R base rather than ggplot
+    -drawPoint          Draw point on line
     -h|help             Show help
 
     ggplot specific:
@@ -72,7 +75,8 @@ Option:
     -lgBox      STR     The legend box style (horizontal, vertical)
 
     -facet      STR     The facet type (facet_wrap, facet_grid)
-    -facetM     STR     The facet model (eg: '. ~ V3', 'V3 ~ .', 'V3 ~ V4', '. ~ V3 + V4', ...)
+    -facetM     STR     The facet model (eg: for facet_wrap, 'V3'; for facet_graid, '. ~ V3', 'V3 ~ .', 'V3 ~ V4', '. ~ V3 + V4', ...)
+                        The specified column must be grouped by -batch option.
     -facetScl   STR     The axis scale in each facet ([fixed], free, free_x or free_y)
 
     -xPer               Show X label in percentage
@@ -91,6 +95,9 @@ Skill:
     q(save = 'no')
 }
 
+
+xLblS = 20
+xTxtS = 18
 xAngle = 0
 alphaT = 'Alpha'
 colorT = 'Color'
@@ -164,6 +171,7 @@ if(length(args) >= 1){
         tmp = parseArg(arg, 'p(df)?', 'p'); if(!is.null(tmp)) myPdf = tmp
         tmp = parseArgAsNum(arg, 'w(idth)?', 'w'); if(!is.null(tmp)) width = tmp
         if(arg == '-ng' || arg == '-noGgplot') noGgplot = TRUE
+        if(arg == '-drawPoint') drawPoint = TRUE
         tmp = parseArgAsNum(arg, 'x1', 'x1'); if(!is.null(tmp)) x1 = tmp
         tmp = parseArgAsNum(arg, 'x2', 'x2'); if(!is.null(tmp)) x2 = tmp
         tmp = parseArgAsNum(arg, 'y1', 'y1'); if(!is.null(tmp)) y1 = tmp
@@ -174,6 +182,8 @@ if(length(args) >= 1){
         tmp = parseArgAsNum(arg, 'mainS', 'mainS'); if(!is.null(tmp)) mainS = tmp
         tmp = parseArg(arg, 'x(lab)?', 'x'); if(!is.null(tmp)) xLab = tmp
         tmp = parseArg(arg, 'y(lab)?', 'y'); if(!is.null(tmp)) yLab = tmp
+        tmp = parseArgAsNum(arg, 'xLblS', 'xLblS'); if(!is.null(tmp)) xLblS = tmp
+        tmp = parseArgAsNum(arg, 'xTxtS', 'xTxtS'); if(!is.null(tmp)) xTxtS = tmp
         tmp = parseArgAsNum(arg, 'xAngle', 'xAngle'); if(!is.null(tmp)) xAngle = tmp
     }
 }
@@ -183,6 +193,8 @@ cat('Check if the following variables are correct as expected:')
 cat('\npdf\t'); if(exists('myPdf')) cat(myPdf)
 cat('\nwidth\t'); if(exists('width')) cat(width)
 cat('\narrow\t'); if(exists('myArrow')) cat(myArrow)
+cat('\nxLblS\t'); if(exists('xLblS')) cat(xLblS)
+cat('\nxTxtS\t'); if(exists('xTxtS')) cat(xTxtS)
 cat('\nxAngle\t'); if(exists('xAngle')) cat(xAngle)
 cat('\nnoGgplot\t'); if(exists('noGgplot')) cat(noGgplot)
 cat('\n')
@@ -265,8 +277,12 @@ if(exists('noGgplot')){
         myCmd = paste0(myCmd, '))')
         eval(parse(text = myCmd))
     }
-    
-    myCmd = paste0('p = p + geom_line(aes(factor(V1, levels=unique(V1)), V2), show.legend = showGuide')
+    if(!is.numeric(data$V1)){
+        aesX='factor(V1, levels=unique(V1))'
+    }else{
+        aesX='V1'
+    }
+    myCmd = paste0('p = p + geom_line(aes(', aesX, ',V2), show.legend = showGuide')
     if(exists('myAlpha')) myCmd = paste0(myCmd, ', alpha = myAlpha')
     if(exists('color')) myCmd = paste0(myCmd, ', color = color')
     if(exists('linetype')) myCmd = paste0(myCmd, ', linetype = linetype')
@@ -282,7 +298,7 @@ if(exists('noGgplot')){
     myCmd = paste0(myCmd, ')')
 
     if(exists('myFacet')){
-        myCmd = paste0(myCmd, ' + ', myFacet, '("' + facetM + '"')
+        myCmd = paste0(myCmd, ' + ', myFacet, '("', facetM, '"')
         if(exists('facetScl')) myCmd = paste0(myCmd, ', scale = facetScl')
         myCmd = paste0(myCmd, ')')
     }
@@ -312,8 +328,9 @@ if(exists('noGgplot')){
     }
     if(exists('main')) p = p + ggtitle(main)
     p = p + theme(plot.title = element_text(size = mainS, hjust = 0.5))
-    if(exists('xLab')) p = p + xlab(xLab) + theme(axis.title.x = element_text(size = mainS*0.8), 
-                                                  axis.text.x = element_text(size = mainS*0.7 , angle = xAngle, hjust = 0.5, vjust = 0.5))
+    if(exists('xLab')) p = p + xlab(xLab) + theme(axis.title.x = element_text(size = xLblS), 
+                                                  axis.text.x = element_text(size =xTxtS , angle = xAngle, hjust = 0.5, vjust = 0.5))
     if(exists('yLab')) p = p + ylab(yLab) + theme(axis.title.y = element_text(size = mainS*0.8), axis.text.y = element_text(size = mainS*0.7))
+    if(exists('drawPoint')) p = p + geom_point(aes_string(aesX,'V2'))
     p
 }

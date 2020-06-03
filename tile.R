@@ -23,6 +23,8 @@ Option:
     -x2         INT     The xlim end
     -y1         INT     The ylim start
     -y2         INT     The ylim end
+    -xAngle     [0,360] The angle of tick labels[0]
+    -vJust      [0,1]   The vertical justification of tick labels[0.5]
     -ng|noGgplot        Draw figure in the style of R base rather than ggplot
     -l|low      STR     Low color of scale color bar[white]
     -high       STR     High color of scale color bar[red]
@@ -48,6 +50,10 @@ Option:
     -fillTP     POS     The title position of fill legend[horizontal: top, vertical:right]
     -fillLP     POS     The label position of fill legend[horizontal: top, vertical:right]
     -fillD      STR     The direction of fill legend (horizontal, vertical)
+    -scaleFillGradient2           Scale fill with gradient2
+    -scaleFillGradient2MidPoint   The midpoint (in data value) of the diverging scale[0]
+    -scaleFillGradient2Low   STR  Fill color for low end of the gradient
+    -scaleFillGradient2High  STR  Fill color for high end of the gradient
     -l|linetype INT     The line type
     -linetypeV  STR     The column name to apply linetype (V3, V4, ...)
     -linetypeT  STR     The title of linetype legend[Line Type]
@@ -82,6 +88,12 @@ Option:
     -annoTxt    STRs    The comma-seperated texts to be annotated
     -annoTxtX   INTs    The comma-seperated X positions of text
     -annoTxtY   INTs    The comma-seperated Y positions of text
+   
+    -panelBackgroundFill  STR  The fill color of panel background
+    -panelGridMajorBlank       Set the panel major grid as blank
+    -panelGridMajorColor  STR  The line color of panel major grid
+    -panelGridMinorBlank       Set the panel minor grid as blank
+    -panelGridMinorColor  STR  The line color of panel minor grid
 Skill:
     Legend title of alpha, color, etc can be set as the same to merge their guides
 ")
@@ -96,6 +108,8 @@ sizeT = 'Size'
 lgTtlS = 15
 lgTxtS = 15
 showGuide = TRUE
+xAngle = 0
+vJust = 0.5
 myPdf = 'figure.pdf'
 mainS = 20
 fillV = 'V3'
@@ -121,6 +135,10 @@ if(length(args) >= 1){
         tmp = parseArg(arg, 'f(ill)?', 'f'); if(!is.null(tmp)) fill = tmp
         tmp = parseArg(arg, 'fillV', 'fillV'); if(!is.null(tmp)) fillV = tmp
         if(arg == '-fillC') fillC = TRUE
+        if(arg == '-scaleFillGradient2') scaleFillGradient2 = TRUE
+        tmp = parseArgNum(arg, 'scaleFillGradient2MidPoint', 'scaleFillGradient2MidPoint'); if(!is.null(tmp)) scaleFillGradient2MidPoint = tmp
+        tmp = parseArg(arg, 'scaleFillGradient2Low', 'scaleFillGradient2Low'); if(!is.null(tmp)) scaleFillGradient2Low = tmp
+        tmp = parseArg(arg, 'scaleFillGradient2High', 'scaleFillGradient2High'); if(!is.null(tmp)) scaleFillGradient2High = tmp
         tmp = parseArg(arg, 'fillT', 'fillT'); if(!is.null(tmp)) fillT = tmp
         tmp = parseArg(arg, 'fillTP', 'fillTP'); if(!is.null(tmp)) fillTP = tmp
         tmp = parseArg(arg, 'fillLP', 'fillLP'); if(!is.null(tmp)) fillLP = tmp
@@ -156,6 +174,11 @@ if(length(args) >= 1){
         tmp = parseArg(arg, 'annoTxt', 'annoTxt'); if(!is.null(tmp)) annoTxt = tmp
         tmp = parseArg(arg, 'annoTxtX', 'annoTxtX'); if(!is.null(tmp)) annoTxtX = tmp
         tmp = parseArg(arg, 'annoTxtY', 'annoTxtY'); if(!is.null(tmp)) annoTxtY = tmp
+        tmp = parseArg(arg, 'panelBackgroundFill', 'panelBackgroundFill'); if(!is.null(tmp)) panelBackgroundFill = tmp
+        if(arg == '-panelGridMajorBlank') panelGridMajorBlank = TRUE
+        tmp = parseArg(arg, 'panelGridMajorColor', 'panelGridMajorColor'); if(!is.null(tmp)) panelGridMajorColor = tmp
+        if(arg == '-panelGridMinorBlank') panelGridMinorBlank = TRUE
+        tmp = parseArg(arg, 'panelGridMinorColor', 'panelGridMinorColor'); if(!is.null(tmp)) panelGridMinorColor = tmp
         
         if(arg == '-h' || arg == '-help') usage()
         tmp = parseArg(arg, 'p(df)?', 'p'); if(!is.null(tmp)) myPdf = tmp
@@ -173,6 +196,8 @@ if(length(args) >= 1){
         tmp = parseArgNum(arg, 'mainS', 'mainS'); if(!is.null(tmp)) mainS = tmp
         tmp = parseArg(arg, 'x(lab)?', 'x'); if(!is.null(tmp)) xLab = tmp
         tmp = parseArg(arg, 'y(lab)?', 'y'); if(!is.null(tmp)) yLab = tmp
+        tmp = parseArgAsNum(arg, 'xAngle', 'xAngle'); if(!is.null(tmp)) xAngle = tmp
+        tmp = parseArgAsNum(arg, 'vJust', 'vJust'); if(!is.null(tmp)) vJust = tmp
         tmp = parseArg(arg, 'textV', 'textV'); if(!is.null(tmp)) textV = tmp
     }
 }
@@ -243,11 +268,19 @@ if(exists('noGgplot')){
     if(exists('fillC')){
         p = p + aes_string(fill = fillV) + scale_fill_continuous(name = fillT, low = low, high = high)
     }else{
-        myCmd = paste0('p = p + aes(fill = factor(', fillV, ')) + guides(fill = guide_legend(fillT')
-        if(exists('fillTP')) myCmd = paste0(myCmd, ', title.position = fillTP')
-        if(exists('fillLP')) myCmd = paste0(myCmd, ', label.position = fillLP')
-        if(exists('fillD')) myCmd = paste0(myCmd, ', direction = fillD')
-        myCmd = paste0(myCmd, '))')
+        if(exists('scaleFillGradient2')){
+            myCmd = "p = p + aes_string(fill = fillV) + scale_fill_gradient2(name = fillT, mid = 'white'"
+            if(exists('scaleFillGradient2MidPoint')) myCmd = paste0(myCmd, ', midpoint = scaleFillGradient2MidPoint')
+            if(exists('scaleFillGradient2Low')) myCmd = paste0(myCmd, ', low = scaleFillGradient2Low')
+            if(exists('scaleFillGradient2High')) myCmd = paste0(myCmd, ', high = scaleFillGradient2High')
+            myCmd = paste0(myCmd, ')')
+        }else{
+            myCmd = paste0('p = p + aes(fill = factor(', fillV, ')) + guides(fill = guide_legend(fillT')
+            if(exists('fillTP')) myCmd = paste0(myCmd, ', title.position = fillTP')
+            if(exists('fillLP')) myCmd = paste0(myCmd, ', label.position = fillLP')
+            if(exists('fillD')) myCmd = paste0(myCmd, ', direction = fillD')
+            myCmd = paste0(myCmd, '))')
+        }
         eval(parse(text = myCmd))
     }
     if(exists('linetypeV')){
@@ -298,6 +331,11 @@ if(exists('noGgplot')){
     if(exists('annoTxt')) p = p + annotate('text', x = as.numeric(strsplit(annoTxtX, ',', fixed = T)),
                                            y = as.numeric(strsplit(annoTxtY, ',', fixed = T)),
                                            label = strsplit(annoTxt, ',', fixed = T))
+    if(exists('panelBackgroundFill')) p = p + theme(panel.background = element_rect(fill = panelBackgroundFill))
+    if(exists('panelGridMajorBlank')) p = p + theme(panel.grid.major = element_blank())
+    if(exists('panelGridMajorColor')) p = p + theme(panel.grid.major = element_line(color = panelGridMajorColor))
+    if(exists('panelGridMinorBlank')) p = p + theme(panel.grid.minor = element_blank())
+    if(exists('panelGridMinorColor')) p = p + theme(panel.grid.minor = element_line(color = panelGridMinorColor))
     
     if(exists('x1') && exists('x2')) p = p + coord_cartesian(xlim = c(x1, x2))
     if(exists('y1') && exists('y2')) p = p + coord_cartesian(ylim = c(y1, y2))
@@ -310,7 +348,12 @@ if(exists('noGgplot')){
     }
     if(exists('main')) p = p + ggtitle(main)
     p = p + theme(plot.title = element_text(size = mainS, hjust = 0.5))
-    if(exists('xLab')) p = p + xlab(xLab) + theme(axis.title.x = element_text(size = mainS*0.8), axis.text.x = element_text(size = mainS*0.7))
-    if(exists('yLab')) p = p + ylab(yLab) + theme(axis.title.y = element_text(size = mainS*0.8), axis.text.y = element_text(size = mainS*0.7))
+    if(exists('xLab')) p = p + xlab(xLab) + theme(
+                                                  axis.title.x = element_text(size = mainS*0.8)
+                                                , axis.text.x = element_text(size = mainS*0.7, angle = xAngle, vjust = vJust)
+                                                )
+    if(exists('yLab')) p = p + ylab(yLab) + theme(axis.title.y = element_text(size = mainS*0.8)
+                                                , axis.text.y = element_text(size = mainS*0.7)
+                                                )
     p
 }

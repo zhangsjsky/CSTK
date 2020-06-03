@@ -63,6 +63,7 @@ Option:
     -fillTP         POS     The title position of fill legend[horizontal: top, vertical:right]
     -fillLP         POS     The label position of fill legend[horizontal: top, vertical:right]
     -fillD          STR     The direction of fill legend (horizontal, vertical)
+    -scaleFillIdentity      Use the color identity to fill
     -l|linetype     INT     The line type
     -linetypeV      STR     The column name to apply linetype (V3, V4,...)
     -linetypeT      STR     The title of linetype legend[Line Type]
@@ -136,7 +137,7 @@ xAngle = 0
 vJust = 0.5
 outlier = TRUE
 notch = FALSE
-oColor = 'red'
+oColor = NULL
 
 if(length(args) >= 1){
     for(i in 1:length(args)){
@@ -172,6 +173,7 @@ if(length(args) >= 1){
         tmp = parseArg(arg, 'fillTP', 'fillTP'); if(!is.null(tmp)) fillTP = tmp
         tmp = parseArg(arg, 'fillLP', 'fillLP'); if(!is.null(tmp)) fillLP = tmp
         tmp = parseArg(arg, 'fillD', 'fillD'); if(!is.null(tmp)) fillD = tmp
+        if(arg == '-scaleFillIdentity') scaleFillIdentity = TRUE
         tmp = parseArgAsNum(arg, 'l(inetype)?', 'l'); if(!is.null(tmp)) linetype = tmp
         tmp = parseArg(arg, 'linetypeV', 'linetypeV'); if(!is.null(tmp)) linetypeV = tmp
         tmp = parseArg(arg, 'linetypeT', 'linetypeT'); if(!is.null(tmp)) linetypeT = tmp
@@ -259,6 +261,10 @@ if(exists('noGgplot')){
     if(exists('main')) myCmd = paste0(myCmd, ', main = main')
     if(exists('xLab')) myCmd = paste0(myCmd, ', xlab = xLab')
     if(exists('yLab')) myCmd = paste0(myCmd, ', ylab = yLab')
+    logStr = ''
+    if(exists('xLog')) logStr = paste0(logStr, 'x')
+    if(exists('yLog')) logStr = paste0(logStr, 'y')
+    if(logStr != '') myCmd = paste0(myCmd, ', log = logStr')
     myCmd = paste0(myCmd, ')')
     eval(parse(text = myCmd))
     
@@ -302,6 +308,7 @@ if(exists('noGgplot')){
         if(exists('fillD')) myCmd = paste0(myCmd, ', direction = fillD')
         myCmd = paste0(myCmd, '))')
         eval(parse(text = myCmd))
+        if(exists('scaleFillIdentity')) p = p + scale_fill_identity()
     }
     if(exists('linetypeV')){
         myCmd = paste0('p = p + aes(linetype = factor(', linetypeV, '))'); eval(parse(text = myCmd))

@@ -70,15 +70,17 @@ while(<GENEINFO>){
 }
 my %exonicFunc2classification = ( 'frameshift_deletion'       => 'Frame_Shift_Del',
                                   'frameshift_insertion'      => 'Frame_Shift_Ins',
+                                  'frameshift_substitution' => 'Frame_Shift_Sub', # Not in Variant_Classification definition
                                   'nonframeshift_deletion'    => 'In_Frame_Del',
                                   'nonframeshift_insertion'   => 'In_Frame_Ins',
+                                  'nonframeshift_substitution' => 'In_Frame_Sub', # Not in Variant_Classification definition
                                   'nonsynonymous_SNV'         => 'Missense_Mutation',
                                   'stopgain'                  => 'Nonsense_Mutation',
                                   'synonymous_SNV'            => 'Silent',
                                   'stoploss'                  => 'Nonstop_Mutation',
                                   'unknown'                   => 'Unknown'
                                 );
-my %func2classification = ( 'exonic'                => 'Exonic', # Not in Variant_Classification
+my %func2classification = ( 'exonic'                => 'Exonic', # Not in Variant_Classification definition
                             'splicing'              => 'Splice_Site',
                             'exonic;splicing'       => 'Splice_Site',
                             'ncRNA_splicing'        => 'Splice_Site',
@@ -215,40 +217,50 @@ while($line = <IN>){
             }else{
                 if(length $alt == 1){
                     $variantType = 'DEL';
+                }else{
+                    if(length $ref == 2){
+                        $variantType = 'DNP';
+                    }else{
+                        if(length $ref == 3){
+                            $variantType = 'TNP';
+                        }else{
+                            $variantType = 'ONP';
+                       }
+                   }
                 }
             }
             
             my ($normalAllele1, $normalAllele2);
-            if($normalGT eq '0/0'){
+            if($normalGT eq '0/0' || $normalGT eq '0|0'){
                 $normalAllele1 = $normalAllele2 = $ref;
-            }elsif($normalGT eq '0/1'){
+            }elsif($normalGT eq '0/1' || $normalGT eq '0|1' || $normalGT eq '1|0'){
                 $normalAllele1 = $ref;
                 $normalAllele2 = $alt;
-            }elsif($normalGT eq '1/1'){
+            }elsif($normalGT eq '1/1' || $normalGT eq '1|1'){
                 $normalAllele1 = $normalAllele2 = $alt;
             }else{
-                die "Other GT: $normalGT\n";
+                die "Other GT of normal for site $chr:$start: $normalGT\n";
             }
             
             my ($tumorAllele1, $tumorAllele2);
             my $tumorGT = $tumorFormats{GT};
-            if($tumorGT eq '0/0'){
+            if($tumorGT eq '0/0' || $tumorGT eq '0|0'){
                 $tumorAllele1 = $tumorAllele2 = $ref;
-            }elsif($tumorGT eq '0/1'){
+            }elsif($tumorGT eq '0/1' || $tumorGT eq '0|1' || $tumorGT eq '1|0'){
                 $tumorAllele1 = $ref;
                 $tumorAllele2 = $alt;
-            }elsif($tumorGT eq '1/1'){
+            }elsif($tumorGT eq '1/1' || $tumorGT eq '1|1'){
                 $tumorAllele1 = $tumorAllele2 = $alt;
             }else{
-                die "Other GT: $tumorGT\n";
+                die "Other GT of tumor for site $chr:$start: $tumorGT\n";
             }
             
             my $mutationStatus = 'None';
             if($tumorGT eq $normalGT){
                 $mutationStatus = 'Germline';
-            }elsif($normalGT eq '0/0' || $normalGT eq '1/1'){
+            }elsif($normalGT eq '0/0' || $normalGT eq '0|0' || $normalGT eq '1/1' || $normalGT eq '1|1'){
                 $mutationStatus = 'Somatic';
-            }elsif($normalGT eq '0/1'){
+            }elsif($normalGT eq '0/1' || $normalGT eq '0|1' || $normalGT eq '1|0'){
                 $mutationStatus = 'LOH';
             }
             
@@ -263,6 +275,7 @@ while($line = <IN>){
                     $exon =~ s/exon//;
                     for my $AAChange(@AAChanges[1..$#AAChanges]){
                         my @AAChange = split ':', $AAChange;
+                        $AAChange[4] = 'NA' unless defined $AAChange[4];
                         push @otherAAChanges, "$AAChange[0]_$AAChange[1]_${classification}_$AAChange[4]";
                     }
                 }
@@ -307,6 +320,7 @@ while($line = <IN>){
             }
             
             # MAF format specification requires the "Chromosome" should be number without "chr" prefix
+            $proteinChange = '' unless defined $proteinChange;
             say join "\t", ($symbol, $entrezID, $center, $ncbiBuild, $chrDigital,
                             $start, $end, $strand, $classification, $variantType,
                             $ref, $tumorAllele1, $tumorAllele2, $ID, 'Unknown',

@@ -1,6 +1,5 @@
 #!/bin/env bash
 
-source $(dirname $0)/env.conf
 thread=1
 scriptName=$(basename $0)
 pid=$$
@@ -54,8 +53,6 @@ if [ $# -eq 0 ];then
     exit 1
 fi
 
-echo -e "\n[INFO] $(date) Checking if all the needed tools are available..." >&2
-checkTools filter.pl venn.R
 
 lists=($@)
 if [ -z "$listNames" ];then
@@ -76,9 +73,9 @@ for A in $(seq 0 1 $lastIndex);do
             listNameB=${listNames[$B]}
             listA=${lists[$A]}
             listB=${lists[$B]}
-            aSpecific=$(filter.pl -o $listB $listA | wc -l)
-            bSpecific=$(filter.pl -o $listA $listB | wc -l)
-            common=$(filter.pl -o $listB --mode include $listA | wc -l)
+            aSpecific=$(tsvFilter.pl -o $listB $listA | wc -l)
+            bSpecific=$(tsvFilter.pl -o $listA $listB | wc -l)
+            common=$(tsvFilter.pl -o $listB --mode include $listA | wc -l)
             aCount=$(wc -l <$listA)
             bCount=$(wc -l <$listB)
             aSpecificPer=0

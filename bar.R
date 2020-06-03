@@ -16,7 +16,7 @@ Option:
     -height         INT     The figure height
     -m|main         STR     The main title
     -mainS          DOU     The size of main title[22 for ggplot]
-    -x|xlab         STR     The xlab[Category]
+    -x|xlab         STR     The xlab[]
     -y|ylab         STR     The ylab
     -xl|xlog        INT     Transform the X scale to INT base log
     -yl|ylog        INT     Transform the Y scale to INT base log
@@ -125,9 +125,9 @@ lgTxtS = 20
 showGuide = TRUE
 myPdf = 'figure.pdf'
 mainS = 22
+xLab=''
 xLblS = 20
 xTxtS = 18
-xLab = 'Category'
 xAngle = 0
 vJust = 0.5
 yLblS = 20
@@ -235,6 +235,15 @@ if(length(args) >= 1){
     }
 }
 
+sink(stderr())
+cat('Check if the following variables are correct as expected:')
+cat('\npdf\t'); if(exists('myPdf')) cat(myPdf)
+cat('\nwidth\t'); if(exists('width')) cat(width)
+cat('\nxAngle\t'); if(exists('xAngle')) cat(xAngle)
+cat('\nnoGgplot\t'); if(exists('noGgplot')) cat(noGgplot)
+cat('\n')
+sink()
+
 myCmd = 'pdf(myPdf'
 if(exists('width')) myCmd = paste0(myCmd, ', width = width')
 if(exists('height')) myCmd = paste0(myCmd, ', height = height')
@@ -269,8 +278,6 @@ if(exists('noGgplot')){
     }else{
         p = ggplot(data, aes(x = V1))
     }
-    
-    if(exists('horizontal')) p = p + geom_hline(yintercept = horizontal, linetype = "longdash", size = 0.3)
     
     if(exists('alphaV')){
         p = p + aes_string(alpha = alphaV)
@@ -350,6 +357,8 @@ if(exists('noGgplot')){
     }
     eval(parse(text = myCmd))
 
+    if(exists('horizontal')) p = p + geom_hline(yintercept = horizontal, linetype = "longdash", size = 0.3)
+
     if(exists('flip')) p = p + coord_flip()
 
     if(exists('lgPos')) p = p + theme(legend.position = lgPos)
@@ -377,8 +386,9 @@ if(exists('noGgplot')){
     }
     if(exists('main')) p = p + ggtitle(main)
     p = p + theme(plot.title = element_text(size = mainS, hjust = 0.5))
-    p = p + xlab(xLab) + theme(axis.title.x = element_text(size = xLblS), 
-                               axis.text.x = element_text(size = xTxtS, angle = xAngle, vjust = vJust))
+    if(exists('xLab')) p = p + xlab(xLab)
+    p = p + theme(axis.title.x = element_text(size = xLblS), 
+                  axis.text.x = element_text(size = xTxtS, angle = xAngle, vjust = vJust))
     if(exists('yLab')) p = p + ylab(yLab)
     p = p + theme(axis.title.y = element_text(size = yLblS), axis.text.y = element_text(size = yTxtS))
     if(exists('anno')){

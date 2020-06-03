@@ -299,106 +299,91 @@ sub getSewedExon{
 }
 
 ####    Argument        Type    Description
-#       blockStarts1    string  block starts of the 1st transript
-#       blockEnd1       string  block end of the 1st transript
-#       blockStarts2    string  block starts of the 2nd transript
-#       blockEnd1       string  block ends of the 2nd transript
+#       blockStarts1    string  block starts of the 1st transript separated by comma
+#       blockEnd1       string  block end of the 1st transript separated by comma
+#       blockStarts2    string  block starts of the 2nd transript separated by comma
+#       blockEnd1       string  block ends of the 2nd transript separated by comma
 ####    Return          Type    Description
 #       mergedTrans     array	an array with refs of mergedStarts array and mergedEnds array
-sub getMergedTrans{
-    my ($blockStarts1, $blockEnd1, $blockStarts2, $blockEnd2) = @_;
-    my @blockStarts1 = @$blockStarts1;
-    my @blockEnds1 = @$blockEnd1;
-    my @blockStarts2 = @$blockStarts2;
-    my @blockEnds2 = @$blockEnd2;
+sub getMergedTrans(){
+    my ($blockStarts1, $blockEnds1, $blockStarts2, $blockEnds2) = @_;
+    my @blockStarts1 = @{$blockStarts1};
+    my @blockEnds1 = @{$blockEnds1};
+    my @blockStarts2 = @{$blockStarts2};
+    my @blockEnds2 = @{$blockEnds2};
     my (@mergedStarts, @mergedEnds);
     my %hash_mergedTran;
-    my ($i,$j,$c,$d);
+    my ($i,$j);
     my (@a, @b);
-    $j=0;
+    $j=0; #j use to indicate the variable of @blockStarts1 in use
     foreach (@blockStarts1){
-	if($j>0&&$blockStarts1[$j]<$blockEnds1[$j-1]){
-	    if($blockEnds1[$j]<$blockEnds1[$j-1])
-	    {
-		$blockStarts1[$j]=$blockStarts1[$j-1];
-		$blockEnds1[$j]=$blockEnds1[$j-1];
-	    }
-	    else{
-		$blockStarts1[$j]=$blockStarts1[$j-1];
-		$hash_mergedTran{$blockStarts1[$j-1]}=$blockEnds1[$j];
-	    }
-	    $j++;
-	    next;
-	}
-	elsif($j>0&&$blockStarts1[$j]==$blockEnds1[$j-1]){
-	    $blockStarts1[$j]=$blockStarts1[$j-1];
-	}
-	my $mergedStart=$blockStarts1[$j];
-	$i=0;
-	if(@blockStarts2){
-	    foreach (@blockStarts2){
-		if($_<$mergedStart){
-		    if($blockEnds2[$i]<$mergedStart){
-			$hash_mergedTran{$blockStarts2[$i]}=$blockEnds2[$i];
-			my $t=scalar @blockStarts2;
-			if($blockEnds2[$t-1]<$blockStarts1[$j]){
-			    $hash_mergedTran{$blockStarts1[$j]}=$blockEnds1[$j];
+		if($j>0){
+			if($blockStarts1[$j]<$blockEnds1[$j-1]){
+				if($blockEnds1[$j]<=$blockEnds1[$j-1]){
+					$blockStarts1[$j]=$blockStarts1[$j-1];
+					$blockEnds1[$j]=$blockEnds1[$j-1];
+					$j++;
+					next;
+				}else{
+					$blockStarts1[$j]=$blockStarts1[$j-1];
+				}
+			}elsif($blockStarts1[$j]==$blockEnds1[$j-1]){
+				$blockStarts1[$j]=$blockStarts1[$j-1];
+			}else{
+				$hash_mergedTran{$blockStarts1[$j-1]}=$blockEnds1[$j-1];
 			}
-		    }
-		    elsif($blockEnds2[$i]==$mergedStart){
-			$hash_mergedTran{$blockStarts2[$i]}=$blockEnds1[$j];
-			$blockStarts1[$j]=$blockStarts2[$i];
-		    }
-		    else{
-			if($blockEnds2[$i]<=$blockEnds1[$j]){
-			    $hash_mergedTran{$blockStarts2[$i]}=$blockEnds1[$j];
-			    $blockStarts1[$j]=$blockStarts2[$i];
+		}
+		my $mergedStart=$blockStarts1[$j];
+		$i=0; #i use to indicate the variable of @blockStarts2 in use
+		if(@blockStarts2){
+			foreach (@blockStarts2){
+				if($_<$mergedStart){
+					if($blockEnds2[$i]<$mergedStart){
+						$hash_mergedTran{$blockStarts2[$i]}=$blockEnds2[$i];
+					}elsif($blockEnds2[$i]==$mergedStart){
+						$blockStarts1[$j]=$blockStarts2[$i];
+					}else{
+						if($blockEnds2[$i]<=$blockEnds1[$j]){
+							$blockStarts1[$j]=$blockStarts2[$i];
+						}else{
+							$blockStarts1[$j]=$blockStarts2[$i];
+							$blockEnds1[$j]=$blockEnds2[$i];
+						}
+					}
+				}elsif($_>=$mergedStart){
+					if($_>$blockEnds1[$j]){
+						last;
+					}elsif($blockEnds2[$i]>=$blockEnds1[$j]){
+						$blockEnds1[$j]=$blockEnds2[$i];
+					}
+				}
+				$i++;											
 			}
-			else{
-			    $hash_mergedTran{$blockStarts2[$i]}=$blockEnds2[$i];
-			    $blockStarts1[$j]=$blockStarts2[$i];
-			    $blockEnds1[$j]=$blockEnds2[$i];
+			if($i>0){
+				for(0..$i-1){
+					shift @blockStarts2;
+					shift @blockEnds2;
+				}
 			}
-		    }
+		}else{
+			if($j<scalar @blockStarts1){
+				$hash_mergedTran{$blockStarts1[$j]}=$blockEnds1[$j];
+			}
 		}
-		elsif($_>=$mergedStart){
-		    if($_>$blockEnds1[$j]){
-			$hash_mergedTran{$blockStarts1[$j]}=$blockEnds1[$j];
-			last;
-		    }
-		    elsif($blockEnds2[$i]>=$blockEnds1[$j]){
-			$hash_mergedTran{$blockStarts1[$j]}=$blockEnds2[$i];
-			$blockEnds1[$j]=$blockEnds2[$i];
-		    }
-		    else{
-			$hash_mergedTran{$blockStarts1[$j]}=$blockEnds1[$j];
-		    }
-		}
-	    $i++;											
-	    }
-	    if($i>0){
-		for(0..$i-1){
-		    shift @blockStarts2;
-		    shift @blockEnds2;
-		}
-	    }
-	}			
-	else{
-		$hash_mergedTran{$blockStarts1[$j]}=$blockEnds1[$j];
-	}							
-	$j++;	
+		$j++;	
     }
+	$j=scalar @blockStarts1;
+	$hash_mergedTran{$blockStarts1[$j-1]}=$blockEnds1[$j-1];
     if(@blockStarts2){
-	my $i=scalar @blockStarts2;
-	foreach(0..$i-1){
-	    $hash_mergedTran{$blockStarts2[$_]}=$blockEnds2[$_];
-	}
+		my $i=scalar @blockStarts2;
+		foreach(0..$i-1){
+			$hash_mergedTran{$blockStarts2[$_]}=$blockEnds2[$_];
+		}
     }
     @a= sort {$a <=> $b } keys %hash_mergedTran;
     @b= sort {$a <=> $b } values %hash_mergedTran;
     return (\@a,\@b);    
 }
-
 
 sub getOverlap{
     my ($blockStarts1, $blockEnds1, $blockStarts2, $blockEnds2) = @_;

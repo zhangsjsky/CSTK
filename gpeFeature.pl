@@ -13,6 +13,7 @@ sub usage{
     print <<HELP;
 Usage: perl $scriptName OPTION INPUT.gpe >OUTPUT.bed
     If INPUT.gpe isn't specified, input from STDIN
+Output: feature length and gene name(the name2 column of gpe) will be output as bed plus column
 Example: perl $scriptName -b -g hg19.size --upstream 1000 hg19.refGene.gpe >hg19.refGene.bed
 Option:
     -b --bin                With bin column
@@ -26,7 +27,7 @@ Option:
        --downstream INT     Fetch downstream INT intergenic regions(force -g)
     -g --chrSize    FILE    Tab-separated file with two columns: chr name and its length
     -s --single             Bundle all features into single line for each transcript
-       --addIndex           Add exon/intron/CDS/UTR index as suffix of name in the 4th column
+       --addIndex           Add exon/intron/CDS/UTR index (in transcript direction) as suffix to name(the 4th column)
     -h --help               Print this help information
 HELP
     exit(-1);
@@ -79,7 +80,7 @@ while(<GPE>){
             $tssEnd = $end;
             $tssStart = $tssEnd - 1;
         }
-        say join "\t", ($chr, $tssStart, $tssEnd, $name, 0, $strand);
+        say join "\t", ($chr, $tssStart, $tssEnd, $name, 0, $strand, $gene);
     }elsif(defined $tts){
         my ($ttsStart, $ttsEnd);
         if($strand eq '-'){
@@ -89,10 +90,11 @@ while(<GPE>){
             $ttsEnd = $end;
             $ttsStart = $ttsEnd - 1;
         }
-        say join "\t", ($chr, $ttsStart, $ttsEnd, $name, 0, $strand);
+        say join "\t", ($chr, $ttsStart, $ttsEnd, $name, 0, $strand, $gene);
     }elsif(defined $intron){
         my ($intronStarts, $intronEnds) = &gpeParser::getIntrons(\@exonStarts, \@exonEnds);
         next if @$intronStarts == 0;
+        my @blockSizes = &gpeParser::getSizes($intronStarts, $intronEnds);
         if(defined $chain){
             say join "\t", ($chr, $intronStarts->[0],
                             $intronEnds->[-1],
@@ -102,9 +104,10 @@ while(<GPE>){
                             $intronStarts->[0],
                             $intronEnds->[-1],
                             '0,0,0',
-                            scalar @$intronStarts,
-                            (join ',', &gpeParser::getSizes($intronStarts, $intronEnds)),
-                            (join ',', &bedParser::getRelStarts($intronStarts))
+                            scalar @blockSizes,
+                            (join ',', @blockSizes),
+                            (join ',', &bedParser::getRelStarts($intronStarts)),
+                            $gene
                             );
         }else{
             for (my $i = 0; $i < @$intronStarts; $i++){
@@ -118,10 +121,12 @@ while(<GPE>){
                                 0,
                                 $strand,
                                 $name,
-                                $intronEnd - $intronStart);
+                                $intronEnd - $intronStart),
+                                $gene;
             }
         }
     }elsif(defined $exon){
+        my @blockSizes = &gpeParser::getSizes(\@exonStarts, \@exonEnds);
         if(defined $chain){
             say join "\t", ($chr, $exonStarts[0],
                                 $exonEnds[-1],
@@ -131,9 +136,10 @@ while(<GPE>){
                                 $exonStarts[0],
                                 $exonEnds[-1],
                                 '0,0,0',
-                                $#exonStarts + 1,
-                                (join ',', &gpeParser::getSizes(\@exonStarts, \@exonEnds)),
-                                (join ',', &bedParser::getRelStarts(\@exonStarts))
+                                scalar @blockSizes,
+                                (join ',', @blockSizes),
+                                (join ',', &bedParser::getRelStarts(\@exonStarts)),
+                                $gene
                                 );
         }else{
             for (my $i = 0; $i < @exonStarts; $i++){
@@ -146,7 +152,7 @@ while(<GPE>){
                                 0,
                                 $strand,
                                 $name,
-                                $exonEnds[$i] - $exonStarts[$i],
+                                $blockSizes[$i],
                                 $gene
                                 );
             }
@@ -154,6 +160,7 @@ while(<GPE>){
     }elsif(defined $cds){
         my ($cdsStarts, $cdsEnds) = &gpeParser::getCDSExons($cdsStart, $cdsEnd, \@exonStarts, \@exonEnds);
         next if @$cdsStarts == 0;
+        my @blockSizes = &gpeParser::getSizes($cdsStarts, $cdsEnds);
         if(defined $chain){
             say join "\t", ($chr, $cdsStarts->[0],
                                 $cdsEnds->[-1],
@@ -163,8 +170,8 @@ while(<GPE>){
                                 $cdsStarts->[0],
                                 $cdsEnds->[-1],
                                 '0,0,0',
-                                scalar @$cdsStarts,
-                                (join ',', &gpeParser::getSizes($cdsStarts, $cdsEnds)),
+                                scalar @blockSizes,
+                                (join ',', @blockSizes),
                                 (join ',', &bedParser::getRelStarts($cdsStarts)),
                                 $gene);
         }else{
@@ -178,7 +185,8 @@ while(<GPE>){
                                 0,
                                 $strand,
                                 $name,
-                                $cdsEnds->[$i] - $cdsStarts->[$i]
+                                $blockSizes[$i],
+                                $gene
                                 );
             }
         }
@@ -194,12 +202,15 @@ while(<GPE>){
                 next;
             }
             my @blockSizes = &gpeParser::getSizes($utrStarts, $utrEnds);
-            my $blockRelStarts = join ',', &bedParser::getRelStarts($utrStarts);
             if(defined $chain){
                 say join "\t", ($chr, $utrStarts->[0], $utrEnds->[-1], $name, 0, $strand,
-                                $utrEnds->[-1], $utrEnds->[-1], '0,0,0', $#blockSizes + 1,
+                                $utrEnds->[-1],
+                                $utrEnds->[-1],
+                                '0,0,0',
+                                scalar @blockSizes,
                                 (join ',', @blockSizes),
-                                $blockRelStarts);
+                                (join ',', &bedParser::getRelStarts($utrStarts)),
+                                $gene);
             }else{
                 for (my $i = 0; $i < @$utrStarts; $i++){
                     my $utrID = $name;
@@ -211,7 +222,8 @@ while(<GPE>){
                                     0,
                                     $strand,
                                     $name,
-                                    $blockSizes[$i]
+                                    $blockSizes[$i],
+                                    $gene
                                     );
                 }
             }
@@ -219,12 +231,16 @@ while(<GPE>){
             if($cdsStart != $start){
                 ($utrStarts, $utrEnds) = &gpeParser::getLeftUTRExons($cdsStart, \@exonStarts, \@exonEnds);
                 my @blockSizes = &gpeParser::getSizes($utrStarts, $utrEnds);
-                my $blockRelStarts = join ',', &bedParser::getRelStarts($utrStarts);
                 if(defined $chain){
                     say join "\t", ($chr, $utrStarts->[0], $utrEnds->[-1], $name, 0, $strand,
-                                    $utrEnds->[-1], $utrEnds->[-1], '0,0,0', $#blockSizes + 1,
+                                    $utrEnds->[-1],
+                                    $utrEnds->[-1],
+                                    '0,0,0',
+                                    scalar @blockSizes,
                                     (join ',', @blockSizes),
-                                    $blockRelStarts);
+                                    (join ',', &bedParser::getRelStarts($utrStarts)),
+                                    $gene
+                                    );
                 }else{
                     for (my $i = 0; $i < @$utrStarts; $i++){
                         my $utrID = $name;
@@ -236,7 +252,8 @@ while(<GPE>){
                                         0,
                                         $strand,
                                         $name,
-                                        $blockSizes[$i]
+                                        $blockSizes[$i],
+                                        $gene
                                         );
                     }
                 }
@@ -245,12 +262,16 @@ while(<GPE>){
             if($cdsEnd != $end){
                 ($utrStarts, $utrEnds) = &gpeParser::getRightUTRExons($cdsEnd, \@exonStarts, \@exonEnds);
                 my @blockSizes = &gpeParser::getSizes($utrStarts, $utrEnds);
-                my $blockRelStarts = join ',', &bedParser::getRelStarts($utrStarts);
                 if(defined $chain){
                     say join "\t", ($chr, $utrStarts->[0], $utrEnds->[-1], $name, 0, $strand,
-                                    $utrEnds->[-1], $utrEnds->[-1], '0,0,0', $#blockSizes + 1,
+                                    $utrEnds->[-1],
+                                    $utrEnds->[-1],
+                                    '0,0,0',
+                                    scalar @blockSizes,
                                     (join ',', @blockSizes),
-                                    $blockRelStarts);
+                                    (join ',', &bedParser::getRelStarts($utrStarts)),
+                                    $gene
+                                    );
                 }else{
                     for (my $i = 0; $i < @$utrStarts; $i++){
                         my $utrID = $name;
@@ -262,7 +283,8 @@ while(<GPE>){
                                         0,
                                         $strand,
                                         $name,
-                                        $blockSizes[$i]
+                                        $blockSizes[$i],
+                                        $gene
                                         );
                     }
                 }
@@ -282,7 +304,7 @@ while(<GPE>){
             $intergenicStart = 0 if $intergenicStart < 0;
             $intergenicEnd = $chrSize{$chr} if $intergenicEnd > $chrSize{$chr};
             $intergenicName = "$name.up". ($intergenicEnd - $intergenicStart) . "bp";
-            say join "\t", ($chr, $intergenicStart, $intergenicEnd, $intergenicName, 0, $strand);
+            say join "\t", ($chr, $intergenicStart, $intergenicEnd, $intergenicName, 0, $strand, $gene);
         }
         if(defined $dnstream){
             if($strand eq '+'){
@@ -295,7 +317,7 @@ while(<GPE>){
             $intergenicStart = 0 if $intergenicStart < 0;
             $intergenicEnd = $chrSize{$chr} if $intergenicEnd > $chrSize{$chr};
             $intergenicName = "$name.dn" . ($intergenicEnd - $intergenicStart) . "bp";
-            say join "\t", ($chr, $intergenicStart, $intergenicEnd, $intergenicName, 0, $strand);
+            say join "\t", ($chr, $intergenicStart, $intergenicEnd, $intergenicName, 0, $strand, $gene);
         }
     }
 }

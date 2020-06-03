@@ -15,7 +15,7 @@ Option:
     -w|width        INT     The figure width
     -m|main         STR     The main title
     -mainS          DOU     The size of main title[20 for ggplot]
-    -x|xlab         STR     The xlab
+    -x|xlab         STR     The xlab[]
     -y|ylab         STR     The ylab
     -xl|xlog        INT     Transform the X scale to INT base log
     -yl|ylog        INT     Transform the Y scale to INT base log
@@ -23,6 +23,12 @@ Option:
     -x2             INT     The xlim end
     -y1             INT     The ylim start
     -y2             INT     The ylim end
+    -xLblS          DOU     The X-axis label size[20 for ggplot]
+    -xTxtS          DOU     The X-axis text size[18 for ggplot]
+    -xAngle         [0,360] The angle of tick labels[0]
+    -vJust          [0,1]   The vertical justification of tick labels[0.5]
+    -yLblS          DOU     The Y-axis label size[20 for ggplot]
+    -yTxtS          DOU     The Y-axis text size[18 for ggplot]
     -ng|noGgplot            Draw figure in the style of R base rather than ggplot
     -ho|horizontal  DOU     Draw a horizontal line
     -h|help                 Show help
@@ -45,7 +51,8 @@ Option:
     -colorT         STR     The title of color legend[Color]
     -colorTP        POS     The title position of color legend[horizontal: top, vertical:right]
     -colorLP        POS     The label position of color legend[horizontal: top, vertical:right]
-    -colorD     	STR     The direction of color legend (horizontal, vertical)
+    -colorD         STR     The direction of color legend (horizontal, vertical)
+    -scaleColorIdentity     Use the color identity to fill point
     -shape      	STR     The shape of point body
     -shapeV     	STR     The column name to apply shape (V3, V4,...)
     -shapeT     	STR     The title of shape legend[Shape]
@@ -92,9 +99,16 @@ shapeT = 'Shape'
 sizeT = 'Size'
 lgTtlS = 15
 lgTxtS = 15
+mainS=20
+xLab=''
+xLblS = 20
+xTxtS = 18
+xAngle = 0
+vJust = 0.5
+yLblS = 20
+yTxtS = 18
 showGuide = TRUE
 myPdf = 'figure.pdf'
-mainS = 20
 errBarWidth = 0.9
 
 if(length(args) >= 1){
@@ -120,6 +134,7 @@ if(length(args) >= 1){
         tmp = parseArg(arg, 'colorTP', 'colorTP'); if(!is.null(tmp)) colorTP = tmp
         tmp = parseArg(arg, 'colorLP', 'colorLP'); if(!is.null(tmp)) colorLP = tmp
         tmp = parseArg(arg, 'colorD', 'colorD'); if(!is.null(tmp)) colorD = tmp
+        if(arg == '-scaleColorIdentity') scaleColorIdentity = TRUE
         tmp = parseArgAsNum(arg, 'shape', 'shape'); if(!is.null(tmp)) shape = tmp
         tmp = parseArg(arg, 'shapeV', 'shapeV'); if(!is.null(tmp)) shapeV = tmp
         tmp = parseArg(arg, 'shapeT', 'shapeT'); if(!is.null(tmp)) shapeT = tmp
@@ -148,9 +163,9 @@ if(length(args) >= 1){
         if(arg == '-xComma') xComma = TRUE
         if(arg == '-yComma') yComma = TRUE
         tmp = parseArgAsNum(arg, 'axisRatio', 'axisRatio'); if(!is.null(tmp)) axisRatio = tmp
-        tmp = parseArg(arg, 'annoTxt', 'annoTxt'); if(!is.null(tmp)) annoTxt = tmp
-        tmp = parseArg(arg, 'annoTxtX', 'annoTxtX'); if(!is.null(tmp)) annoTxtX = tmp
-        tmp = parseArg(arg, 'annoTxtY', 'annoTxtY'); if(!is.null(tmp)) annoTxtY = tmp
+        tmp = parseArgStrs(arg, 'annoTxt', 'annoTxt'); if(!is.null(tmp)) annoTxt = tmp
+        tmp = parseArgNums(arg, 'annoTxtX', 'annoTxtX'); if(!is.null(tmp)) annoTxtX = tmp
+        tmp = parseArgNums(arg, 'annoTxtY', 'annoTxtY'); if(!is.null(tmp)) annoTxtY = tmp
         
         if(arg == '-h' || arg == '-help') usage()
         tmp = parseArg(arg, 'p(df)?', 'p'); if(!is.null(tmp)) myPdf = tmp
@@ -166,6 +181,13 @@ if(length(args) >= 1){
         tmp = parseArgAsNum(arg, 'mainS', 'mainS'); if(!is.null(tmp)) mainS = tmp
         tmp = parseArg(arg, 'x(lab)?', 'x'); if(!is.null(tmp)) xLab = tmp
         tmp = parseArg(arg, 'y(lab)?', 'y'); if(!is.null(tmp)) yLab = tmp
+        tmp = parseArgAsNum(arg, 'xAngle', 'xAngle'); if(!is.null(tmp)) xAngle = tmp
+        tmp = parseArgAsNum(arg, 'vJust', 'vJust'); if(!is.null(tmp)) vJust = tmp
+        tmp = parseArgAsNum(arg, 'xLblS', 'xLblS'); if(!is.null(tmp)) xLblS = tmp
+        tmp = parseArgAsNum(arg, 'xTxtS', 'xTxtS'); if(!is.null(tmp)) xTxtS = tmp
+        tmp = parseArgAsNum(arg, 'yLblS', 'yLblS'); if(!is.null(tmp)) yLblS = tmp
+        tmp = parseArgAsNum(arg, 'yTxtS', 'yTxtS'); if(!is.null(tmp)) yTxtS = tmp
+
     }
 }
 if(exists('width')){
@@ -211,6 +233,7 @@ if(exists('noGgplot')){
             p = p + aes_string(color = colorV)
         }else{
             myCmd = paste0('p = p + aes(color = factor(', colorV, '))'); eval(parse(text = myCmd))
+            if(exists('scaleColorIdentity')) p = p + scale_color_identity()
         }
         myCmd = 'p = p + guides(color = guide_legend(colorT'
         if(exists('colorTP')) myCmd = paste0(myCmd, ', title.position = colorTP')
@@ -263,9 +286,7 @@ if(exists('noGgplot')){
     if(exists('xComma')) p = p + scale_x_continuous(labels = comma)
     if(exists('yComma')) p = p + scale_y_continuous(labels = comma)
     if(exists('axisRatio')) p = p + coord_fixed(ratio = axisRatio)
-    if(exists('annoTxt')) p = p + annotate('text', x = as.numeric(strsplit(annoTxtX, ',', fixed = T)),
-                                           y = as.numeric(strsplit(annoTxtY, ',', fixed = T)),
-                                           label = strsplit(annoTxt, ',', fixed = T))
+    if(exists('annoTxt')) p = p + annotate('text', x = annoTxtX, y = annoTxtY, label = annoTxt)
     
     if(exists('x1') && exists('x2')) p = p + coord_cartesian(xlim = c(x1, x2))
     if(exists('y1') && exists('y2')) p = p + coord_cartesian(ylim = c(y1, y2))
@@ -278,8 +299,11 @@ if(exists('noGgplot')){
     }
     if(exists('main')) p = p + ggtitle(main)
     p = p + theme(plot.title = element_text(size = mainS, hjust = 0.5))
-    if(exists('xLab')) p = p + xlab(xLab) + theme(axis.title.x = element_text(size = mainS*0.8), axis.text.x = element_text(size = mainS*0.7))
-    if(exists('yLab')) p = p + ylab(yLab) + theme(axis.title.y = element_text(size = mainS*0.8), axis.text.y = element_text(size = mainS*0.7))
+    if(exists('xLab')) p = p + xlab(xLab)
+    p = p + theme(axis.title.x = element_text(size = xLblS), 
+                  axis.text.x = element_text(size = xTxtS, angle = xAngle, vjust = vJust))
+    if(exists('yLab')) p = p + ylab(yLab)
+    p = p + theme(axis.title.y = element_text(size = yLblS), axis.text.y = element_text(size = yTxtS))
     
     if(exists('horizontal')) p = p + geom_hline(yintercept = horizontal, linetype = "longdash", size = 0.3)
     

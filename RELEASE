@@ -1,3 +1,28 @@
+# Version to be release
+## 1. Add new tools
+Add bam-readcount2depth.pl,maftools.R, enhancedVolcano.R, complexHeatmap.R and upSet.R
+## 2. Modify existing tools
+Add control of panel for tile.R
+Add scale_fill_gradient2 for tile.R
+Make testT.R capable of handling the case that when any of the input list contains only one observation
+Make tile.R capable of seting angle of X lab with -xAngle
+Make box.R and boxes.R capable of presenting Y-axis number in log-transform when using boxplot()
+Make violine.R capable of controling fill
+Make pie.R more user-friendly
+Make box.R capable of filling color with identity
+Make gpeFeature.pl output gene name
+Revise help information of statistic.R
+Change --minFR to --maxFR of vcfFilter.pl
+## 3. Fix bugs
+Fix bug of quantile.R by changing "arg = '-point'" to "arg == '-point'"
+Fix a few bugs in line.R
+Fix bug in vcfFilter.pl
+Fix bug in testFisher.R by changing the separator of output from space to tab
+Fix bugs of getMergedTrans() in pm/gpeParser.pm
+## 4. Others
+Add group excute permission
+Change file type from dos to unix, including quantile.R etc.
+
 # Version 1.0.1
 ## 1. Update README
 ## 2. Add more scripts
